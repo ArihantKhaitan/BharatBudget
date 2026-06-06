@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box, page_header,
+    footer_html, insight_box, page_header,
     ORANGE, ORANGE_LIGHT, TEAL, RED, BLUE_SOFT, TEXT_PRIMARY, TEXT_SEC, TEXT_MUTED,
     BORDER, GRID_COLOR, PLOTLY_PAPER, PLOTLY_PLOT, BG_SURFACE, BG_ELEVATED,
 )
@@ -17,31 +17,6 @@ from data.tax_revenue import (
     FILING_COMPLIANCE_PCT, ITR_FILERS_CR,
 )
 
-st.set_page_config(
-    page_title="Tax Revenue — BharatBudget",
-    page_icon="💰",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
-
-with st.sidebar:
-    st.markdown(
-        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
-        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.4rem 0;'>💰 Tax Revenue</div>",
-        unsafe_allow_html=True,
-    )
-    year_filter = st.selectbox("Focus Year", BUDGET_YEARS[::-1], index=0)
-    st.markdown("---")
-    st.markdown(
-        f"<p style='font-size:0.76rem;color:{TEXT_MUTED};'>"
-        "This page tracks <b>where India's tax revenue comes from</b> — Corporate Tax, "
-        "Personal Income Tax, GST, Customs Duty, and Excise Duty. "
-        "All figures are Centre's share (before FC devolution to states)."
-        "</p>",
-        unsafe_allow_html=True,
-    )
-
 st.markdown(
     page_header(
         "💰",
@@ -51,6 +26,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown("---")
+
+# ── Page controls (inline) ────────────────────────────────────────────────────
+c_yr, _ = st.columns([1, 3])
+with c_yr:
+    year_filter = st.selectbox("Focus Year", BUDGET_YEARS[::-1], index=0)
 
 # ── Top metrics ───────────────────────────────────────────────────────────────
 gross   = GROSS_TAX_REVENUE[year_filter]

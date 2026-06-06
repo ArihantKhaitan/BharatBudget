@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box, page_header,
+    footer_html, insight_box, page_header,
     ORANGE, ORANGE_LIGHT, TEAL, RED, BLUE_SOFT, TEXT_PRIMARY, TEXT_SEC, TEXT_MUTED,
     BORDER, GRID_COLOR, PLOTLY_PAPER, PLOTLY_PLOT, BG_SURFACE, BG_ELEVATED,
 )
@@ -19,33 +19,6 @@ from data.schemes import (
     UJJWALA_CONNECTIONS_CR, UJJWALA_EXPENDITURE_LCR,
     STATE_PMAYG_2023_24, STATE_MGNREGA_PERSONDAYS_2023_24,
 )
-
-st.set_page_config(
-    page_title="Scheme Tracker — BharatBudget",
-    page_icon="🏗️",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
-
-with st.sidebar:
-    st.markdown(
-        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
-        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.4rem 0;'>🏗️ Scheme Tracker</div>",
-        unsafe_allow_html=True,
-    )
-    scheme_choice = st.selectbox("Select Scheme", [
-        "MGNREGA", "PM-KISAN", "Ayushman Bharat PM-JAY",
-        "PM Awas Yojana Gramin", "Jal Jeevan Mission", "PM Ujjwala Yojana",
-    ])
-    st.markdown("---")
-    st.markdown(
-        f"<p style='font-size:0.76rem;color:{TEXT_MUTED};'>"
-        "Track how India's major welfare and development schemes have performed in terms "
-        "of expenditure and beneficiaries over the last decade."
-        "</p>",
-        unsafe_allow_html=True,
-    )
 
 st.markdown(
     page_header(
@@ -84,6 +57,14 @@ for i, (name, stat1, stat2, spend) in enumerate(schemes_overview):
         )
 
 st.markdown("---")
+
+# ── Page controls (inline) ────────────────────────────────────────────────────
+c_sc, _ = st.columns([2, 2])
+with c_sc:
+    scheme_choice = st.selectbox("Select Scheme to Deep Dive", [
+        "MGNREGA", "PM-KISAN", "Ayushman Bharat PM-JAY",
+        "PM Awas Yojana Gramin", "Jal Jeevan Mission", "PM Ujjwala Yojana",
+    ])
 
 # ── Deep-dive on selected scheme ─────────────────────────────────────────────
 st.markdown(

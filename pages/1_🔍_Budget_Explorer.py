@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box, page_header,
+    footer_html, insight_box, page_header,
     ORANGE, TEAL, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_CARD, NAVY_LIGHT,
     BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
 )
@@ -13,30 +13,15 @@ from data.budget_data import (
 )
 from components.charts import treemap_chart, bar_top10, donut_chart, fmt_lcr
 
-st.set_page_config(
-    page_title="Budget Explorer — BharatBudget",
-    page_icon="🔍",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
-
-# ── Sidebar controls ──────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown(
-        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
-        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.2rem 0;'>🔍 Budget Explorer</div>",
-        unsafe_allow_html=True,
-    )
-    selected_year = st.selectbox("Select Year", BUDGET_YEARS[::-1], index=0)
-    view_type = st.radio("Show values", ["Allocated", "Actual Expenditure"], index=0)
-    st.markdown("---")
-    st.markdown(
-        f"<p style='font-size:0.78rem;color:{TEXT_MUTED};'>"
-        "Actual expenditure is the amount <em>actually spent</em> by end of financial year. "
-        "It may differ from what was budgeted at the start."
-        "</p>",
-        unsafe_allow_html=True,
+# ── Page controls (inline) ────────────────────────────────────────────────────
+c_yr, c_vt, _ = st.columns([1, 2, 1])
+with c_yr:
+    selected_year = st.selectbox("Year", BUDGET_YEARS[::-1], index=0)
+with c_vt:
+    view_type = st.radio(
+        "Show values", ["Allocated", "Actual Expenditure"],
+        index=0, horizontal=True,
+        help="Actual expenditure is the amount actually spent by end of financial year.",
     )
 
 value_key = "allocated" if view_type == "Allocated" else "actual"

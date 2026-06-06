@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box, page_header,
+    footer_html, insight_box, page_header,
     ORANGE, ORANGE_LIGHT, TEAL, RED, BLUE_SOFT, TEXT_PRIMARY, TEXT_SEC, TEXT_MUTED,
     BORDER, GRID_COLOR, PLOTLY_PAPER, PLOTLY_PLOT, BG_ELEVATED,
 )
@@ -15,29 +15,6 @@ from data.procurement import (
     GEM_CATEGORIES_2023_24, STATE_GEM_PROCUREMENT_2023_24,
     MAJOR_CONTRACTS_BY_SECTOR, GEM_MSME_PCT, GEM_WOMEN_ENTERPRISES_PCT,
 )
-
-st.set_page_config(
-    page_title="Government Procurement — BharatBudget",
-    page_icon="🏛️",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
-
-with st.sidebar:
-    st.markdown(
-        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
-        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.4rem 0;'>🏛️ Procurement</div>",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        f"<p style='font-size:0.76rem;color:{TEXT_MUTED};'>"
-        "Government procurement — buying goods and services — is how budget money reaches "
-        "businesses and citizens directly. GeM (Govt e-Marketplace) is India's digital "
-        "procurement platform launched in 2016."
-        "</p>",
-        unsafe_allow_html=True,
-    )
 
 st.markdown(
     page_header(

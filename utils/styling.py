@@ -129,7 +129,7 @@ GLOBAL_CSS = f"""
   color: {TEXT_PRIMARY} !important;
 }}
 .main .block-container {{
-  padding: 1.5rem 2rem 4rem !important;
+  padding: 0.75rem 2rem 4rem !important;
   max-width: 1280px !important;
   background-color: {BG_PRIMARY} !important;
 }}
@@ -325,6 +325,54 @@ footer    {{ visibility: hidden !important; }}
   border: 1px solid {ORANGE}30 !important;
   border-radius: 10px !important;
   color: {TEXT_PRIMARY} !important;
+}}
+
+/* ── Sidebar collapse toggle button ── */
+[data-testid="collapsedControl"] {{
+  background: {BG_ELEVATED} !important;
+  border: 1px solid {BORDER} !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 10px 7px !important;
+  margin-top: 0.8rem !important;
+  color: {ORANGE} !important;
+  box-shadow: 2px 0 8px rgba(200,78,0,0.08) !important;
+}}
+[data-testid="collapsedControl"] svg {{
+  color: {ORANGE} !important;
+  fill: {ORANGE} !important;
+}}
+button[data-testid="baseButton-headerNoPadding"],
+button[data-testid="baseButton-header"] {{
+  color: {TEXT_MUTED} !important;
+  border-radius: 8px !important;
+}}
+button[data-testid="baseButton-headerNoPadding"]:hover,
+button[data-testid="baseButton-header"]:hover {{
+  background: rgba(200,78,0,0.08) !important;
+  color: {ORANGE} !important;
+}}
+
+/* ── Controls row (inline page controls) ── */
+.controls-row {{
+  background: {BG_SURFACE};
+  border: 1px solid {BORDER};
+  border-radius: 12px;
+  padding: 0.85rem 1.2rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}}
+
+/* ── Section header ── */
+.section-header {{
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: {TEXT_PRIMARY};
+  margin-bottom: 0.6rem;
+  margin-top: 0.2rem;
 }}
 
 /* ── Divider ── */

@@ -6,21 +6,13 @@ import numpy as np
 import plotly.graph_objects as go
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box, page_header,
+    footer_html, insight_box, page_header,
     ORANGE, ORANGE_LIGHT, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY,
     NAVY_LIGHT, NAVY_CARD, BEIGE, BEIGE_MUTED, PLOTLY_PAPER, PLOTLY_PLOT,
     BORDER, GRID_COLOR,
 )
 from data.budget_data import BUDGET_YEARS, MINISTRY_ALLOCATIONS, TOTAL_BUDGET, COMPARISON_MINISTRIES
 from components.charts import multiline_chart, yoy_bar
-
-st.set_page_config(
-    page_title="Follow the Money — BharatBudget",
-    page_icon="💸",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def build_ministry_df(ministries: list, value_key: str = "allocated") -> pd.DataFrame:
@@ -47,22 +39,6 @@ MINISTRY_COLORS = {
 
 PALETTE = [ORANGE, "#E84040", "#7EB8FF", "#00C49A", "#C07BDB", "#6DBF7E", "#FF9A4D", "#4DC8E8"]
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown(
-        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
-        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.2rem 0;'>💸 Follow the Money</div>",
-        unsafe_allow_html=True,
-    )
-    selected_ministries = st.multiselect(
-        "Compare ministries",
-        COMPARISON_MINISTRIES,
-        default=["Defence", "Education", "Health & Family Welfare", "Road Transport & Highways"],
-    )
-    show_pct_gdp = st.checkbox("Show as % of total budget", value=False)
-    st.markdown("---")
-    focus_ministry = st.selectbox("Deep-dive ministry (YoY chart)", COMPARISON_MINISTRIES, index=0)
-
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
     page_header(
@@ -73,6 +49,18 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown("---")
+
+# ── Page controls (inline) ────────────────────────────────────────────────────
+selected_ministries = st.multiselect(
+    "Compare ministries",
+    COMPARISON_MINISTRIES,
+    default=["Defence", "Education", "Health & Family Welfare", "Road Transport & Highways"],
+)
+c_opt1, c_opt2 = st.columns(2)
+with c_opt1:
+    show_pct_gdp = st.checkbox("Show as % of total budget", value=False)
+with c_opt2:
+    focus_ministry = st.selectbox("Deep-dive ministry (YoY chart)", COMPARISON_MINISTRIES, index=0)
 
 if not selected_ministries:
     st.warning("Please select at least one ministry from the sidebar.")

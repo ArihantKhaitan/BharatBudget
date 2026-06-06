@@ -6,7 +6,7 @@ import numpy as np
 import plotly.graph_objects as go
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box, page_header,
+    footer_html, insight_box, page_header,
     ORANGE, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_LIGHT, NAVY_CARD, TEXT_MAIN,
     PLOTLY_PAPER, PLOTLY_PLOT,
 )
@@ -19,14 +19,6 @@ from data.indicators import (
     PM_KISAN_BENEFICIARIES,
 )
 from components.charts import scatter_correlation
-
-st.set_page_config(
-    page_title="Impact Correlator — BharatBudget",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def ministry_series(ministry: str, value_key: str = "allocated") -> dict:
@@ -80,21 +72,6 @@ def dual_axis_chart(years, spend_vals, outcome_vals,
         ),
     )
     return fig
-
-# ── Sidebar ───────────────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown(
-        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
-        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.2rem 0;'>📊 Impact Correlator</div>",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        f"<p style='font-size:0.78rem;color:{TEXT_MUTED};'>"
-        "Explore whether more government spending actually improves social outcomes. "
-        "Note: correlation ≠ causation — many factors influence these indicators."
-        "</p>",
-        unsafe_allow_html=True,
-    )
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(

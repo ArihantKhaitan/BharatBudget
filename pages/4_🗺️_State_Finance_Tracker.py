@@ -6,7 +6,7 @@ import numpy as np
 import plotly.graph_objects as go
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box, page_header,
+    footer_html, insight_box, page_header,
     ORANGE, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_LIGHT, NAVY_CARD,
     TEXT_MAIN, BLUE_SOFT, BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT,
     BORDER, GRID_COLOR,
@@ -16,35 +16,17 @@ from data.states import (
     TOTAL_TRANSFERS_BY_YEAR, STATE_GSDP_GROWTH, FC_DEVOLUTION_SHARE,
 )
 
-st.set_page_config(
-    page_title="State Finance Tracker — BharatBudget",
-    page_icon="🗺️",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
-
-# ── Sidebar ───────────────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown(
-        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
-        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.2rem 0;'>🗺️ State Finance Tracker</div>",
-        unsafe_allow_html=True,
-    )
+# ── Page controls (inline) ────────────────────────────────────────────────────
+c_sort, c_chk = st.columns([2, 1])
+with c_sort:
     sort_by = st.selectbox(
         "Sort states by",
         ["Per-capita transfer", "Total transfer", "GSDP Growth", "FC Devolution Share"],
         index=0,
     )
+with c_chk:
+    st.markdown("<br>", unsafe_allow_html=True)
     show_special_cat = st.checkbox("Highlight Special Category States", value=True)
-    st.markdown("---")
-    st.markdown(
-        f"<p style='font-size:0.78rem;color:{TEXT_MUTED};'>"
-        "Central transfers include: Tax Devolution, Grants-in-Aid, Centrally Sponsored Schemes (CSS), "
-        "and Central Sector Schemes. Data based on Finance Commission XV award + CGA actuals."
-        "</p>",
-        unsafe_allow_html=True,
-    )
 
 # Special category states (hilly/northeast)
 SPECIAL_CATEGORY = {
