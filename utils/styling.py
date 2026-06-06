@@ -140,42 +140,62 @@ GLOBAL_CSS = f"""
 ::-webkit-scrollbar-thumb        {{ background: {ORANGE}55; border-radius: 99px; }}
 ::-webkit-scrollbar-thumb:hover  {{ background: {ORANGE}; }}
 
-/* ── Sidebar — ONLY background/color, NO display/visibility overrides ── */
+/* ── Sidebar — andrewlu0 clean style ── */
 [data-testid="stSidebar"] {{
   background-color: {BG_ELEVATED} !important;
-  border-right: 2px solid {BORDER} !important;
+  border-right: 1px solid {BORDER} !important;
 }}
 [data-testid="stSidebar"] > div,
 [data-testid="stSidebarContent"] {{
   background-color: {BG_ELEVATED} !important;
+  padding: 0 !important;
 }}
 [data-testid="stSidebarNavSeparator"] {{
   border-color: {BORDER} !important;
+  opacity: 0.5 !important;
+  margin: 6px 12px !important;
 }}
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span:not([data-testid]),
 [data-testid="stSidebar"] div.stMarkdown {{
   color: {TEXT_PRIMARY} !important;
+  font-family: 'DM Sans', sans-serif !important;
 }}
 [data-testid="stSidebarNavLink"] {{
-  border-radius: 8px !important;
-  margin: 2px 8px !important;
-  padding: 6px 10px !important;
-  font-size: 0.85rem !important;
+  border-radius: 7px !important;
+  margin: 1px 8px !important;
+  padding: 7px 10px !important;
+  font-size: 0.82rem !important;
   font-family: 'DM Sans', sans-serif !important;
+  font-weight: 500 !important;
   color: {TEXT_SEC} !important;
-  transition: background 0.18s, color 0.18s !important;
+  letter-spacing: 0.01em !important;
+  transition: background 0.14s ease, color 0.14s ease, transform 0.1s ease !important;
+  border-left: 2px solid transparent !important;
 }}
 [data-testid="stSidebarNavLink"]:hover {{
-  background: rgba(200,78,0,0.1) !important;
+  background: rgba(200,78,0,0.08) !important;
   color: {ORANGE} !important;
+  transform: translateX(2px) !important;
+  border-left-color: {ORANGE}55 !important;
 }}
 [data-testid="stSidebarNavLink"][aria-current="page"] {{
-  background: rgba(200,78,0,0.12) !important;
-  border-left: 3px solid {ORANGE} !important;
+  background: rgba(200,78,0,0.11) !important;
+  border-left: 2px solid {ORANGE} !important;
   color: {ORANGE} !important;
   font-weight: 600 !important;
+}}
+[data-testid="stSidebarNavLink"] p {{
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 0.82rem !important;
+}}
+[data-testid="stSidebarNavLink"][aria-current="page"] p {{
+  font-weight: 600 !important;
+  color: {ORANGE} !important;
+}}
+[data-testid="stSidebarNavItems"] {{
+  padding: 4px 0 !important;
 }}
 
 /* ── Header: make it transparent, keep sidebar toggle functional ── */
@@ -487,6 +507,69 @@ hr {{
   background: rgba(43,82,153,0.08);
   color: {BLUE_SOFT};
   border-color: {BLUE_SOFT}40;
+}}
+
+/* Statistics card (aghasisahakyan1 style) */
+.stat-bar-card {{
+  background: {BG_SURFACE};
+  border: 1px solid {BORDER};
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem 1rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+}}
+.stat-bar-card .bars-row {{
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 80px;
+  margin: 0.8rem 0 0.5rem;
+}}
+.stat-bar-card .bar-col {{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  height: 100%;
+  justify-content: flex-end;
+}}
+.stat-bar-card .bar-fill {{
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  background: repeating-linear-gradient(
+    45deg, rgba(255,255,255,0.07), rgba(255,255,255,0.07) 2px,
+    transparent 2px, transparent 6px
+  ), {ORANGE};
+  transition: height 0.4s cubic-bezier(.34,1.56,.64,1);
+  position: relative;
+}}
+.stat-bar-card .bar-fill.highlight {{
+  background: repeating-linear-gradient(
+    45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.1) 2px,
+    transparent 2px, transparent 6px
+  ), #38BDF8;
+}}
+.stat-bar-card .bar-badge {{
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: {BG_ELEVATED};
+  border: 1.5px solid {BORDER};
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  color: {TEXT_PRIMARY};
+  flex-shrink: 0;
+}}
+.stat-bar-card .bar-label {{
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.6rem;
+  color: {TEXT_MUTED};
+  text-align: center;
+  max-width: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }}
 
 /* Scorecard row */

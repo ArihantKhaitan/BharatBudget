@@ -12,41 +12,6 @@ from utils.styling import (
 from data.budget_data import TOTAL_BUDGET, BUDGET_YEARS, MINISTRY_ALLOCATIONS, NOMINAL_GDP
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown(
-        f"""
-        <div style='padding:0.8rem 0.4rem 0.4rem;'>
-          <div style='display:flex; align-items:center; gap:0.6rem; margin-bottom:0.4rem;'>
-            <span style='font-size:1.6rem; line-height:1;'>🇮🇳</span>
-            <div>
-              <div style='font-family:"Playfair Display",Georgia,serif;
-                          font-size:1.1rem; font-weight:700; color:{ORANGE};
-                          letter-spacing:-0.01em; line-height:1.1;'>BharatBudget</div>
-              <div style='font-family:"DM Sans",sans-serif; font-size:0.6rem;
-                          color:{TEXT_MUTED}; letter-spacing:0.08em;
-                          text-transform:uppercase; margin-top:1px;'>Public Finance Tracker</div>
-            </div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.markdown("---")
-    st.markdown(
-        f"<p style='font-family:\"DM Sans\",sans-serif; font-size:0.75rem; color:{TEXT_SEC}; padding:0 0.2rem 0.4rem;'>"
-        "Navigate using the links above to explore India's Union Budget — ministry breakdowns, "
-        "fiscal health, welfare schemes, tax revenue, and more."
-        "</p>",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        f"<p style='font-family:\"DM Sans\",sans-serif; font-size:0.66rem; color:{TEXT_MUTED}; padding:0 0.2rem;'>"
-        f"Data: <a href='https://indiabudget.gov.in' style='color:{ORANGE};text-decoration:none;'>indiabudget.gov.in</a>"
-        f" · <a href='https://data.gov.in' style='color:{ORANGE};text-decoration:none;'>data.gov.in</a>"
-        f" · RBI DBIE · MOSPI"
-        "</p>",
-        unsafe_allow_html=True,
-    )
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
@@ -93,6 +58,40 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+# ── Statistics card — top 4 ministries (aghasisahakyan1 style) ───────────────
+STAT_MINISTRIES = ["Interest Payments", "Defence", "Road Transport & Highways", "Rural Development"]
+STAT_COLORS     = ["#7A6250", "#B03030", "#C84E00", "#2E7D60"]
+_yd = MINISTRY_ALLOCATIONS["2024-25"]
+_tt = TOTAL_BUDGET["2024-25"]
+_stat_vals = [_yd.get(m, {}).get("allocated", 0) for m in STAT_MINISTRIES]
+_max_v = max(_stat_vals) if _stat_vals else 1
+
+bars_html = ""
+for m, v, col in zip(STAT_MINISTRIES, _stat_vals, STAT_COLORS):
+    pct   = v / _tt * 100
+    h_pct = v / _max_v * 100
+    bars_html += f"""
+    <div class='bar-col'>
+      <div class='bar-badge'>{pct:.0f}%</div>
+      <div class='bar-fill{"" if col != "#C84E00" else " highlight"}' style='height:{h_pct:.0f}%; background:linear-gradient(180deg,{col}dd,{col});'></div>
+      <div class='bar-label'>{m.split("/")[0].strip()[:12]}</div>
+    </div>"""
+
+st.markdown(
+    f"""
+    <div class='stat-bar-card'>
+      <div style='font-family:"DM Sans",sans-serif; font-size:0.6rem; font-weight:700;
+                  letter-spacing:0.09em; text-transform:uppercase; color:{ORANGE}; margin-bottom:0.2rem;'>
+        Top Ministry Allocations 2024-25
+      </div>
+      <div class='bars-row'>{bars_html}</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown("<br>", unsafe_allow_html=True)
 
 # ── Key stats ─────────────────────────────────────────────────────────────────
 CURRENT_YEAR = "2024-25"

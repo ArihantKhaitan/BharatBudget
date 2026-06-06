@@ -2,18 +2,30 @@
 
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
 
 from utils.styling import (
     footer_html, insight_box, page_header,
-    ORANGE, TEAL, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_CARD, NAVY_LIGHT,
-    BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
+    ORANGE, ORANGE_LIGHT, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_CARD, NAVY_LIGHT,
+    BEIGE, BEIGE_MUTED, BG_PRIMARY, BG_SURFACE, BG_ELEVATED, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
 )
 from data.budget_data import (
     BUDGET_YEARS, TOTAL_BUDGET, MINISTRY_ALLOCATIONS, NOMINAL_GDP, MINISTRY_CATEGORIES, CATEGORY_COLORS
 )
 from components.charts import treemap_chart, bar_top10, donut_chart, fmt_lcr
 
-# ── Page controls (inline) ────────────────────────────────────────────────────
+# ── Header ────────────────────────────────────────────────────────────────────
+st.markdown(
+    page_header(
+        "🔍",
+        "Budget Explorer",
+        "Explore India's Union Budget — ministry-wise breakdown, treemaps, allocation vs actual spending.",
+    ),
+    unsafe_allow_html=True,
+)
+st.markdown("---")
+
+# ── Page controls (inline, below header) ──────────────────────────────────────
 c_yr, c_vt, _ = st.columns([1, 2, 1])
 with c_yr:
     selected_year = st.selectbox("Year", BUDGET_YEARS[::-1], index=0)
@@ -39,17 +51,6 @@ if value_key == "actual":
             "Showing allocated figures instead."
         )
         value_key = "allocated"
-
-# ── Header ────────────────────────────────────────────────────────────────────
-st.markdown(
-    page_header(
-        "🔍",
-        "Budget Explorer",
-        f"Union Budget {selected_year} — {'Allocated' if value_key=='allocated' else 'Actual Expenditure'} · Ministry-wise breakdown",
-    ),
-    unsafe_allow_html=True,
-)
-st.markdown("---")
 
 # ── Top metrics ───────────────────────────────────────────────────────────────
 prev_year_idx = BUDGET_YEARS.index(selected_year)
@@ -141,8 +142,6 @@ for cat, ministries in MINISTRY_CATEGORIES.items():
 
 col_donut, col_cat_text = st.columns([1, 1])
 with col_donut:
-    from plotly.graph_objects import Figure, Pie
-    import plotly.graph_objects as go
     colors = [CATEGORY_COLORS.get(l, "#546E7A") for l in cat_labels]
     fig_donut = go.Figure(go.Pie(
         labels=cat_labels, values=cat_totals,
@@ -196,7 +195,6 @@ for m, d in sorted(year_data.items(), key=lambda x: x[1]["allocated"], reverse=T
         min_names.append(m[:22])
 
 if alloc_vals:
-    import plotly.graph_objects as go
     fig_cmp = go.Figure()
     fig_cmp.add_trace(go.Bar(
         name="Allocated", x=min_names, y=alloc_vals,
@@ -227,5 +225,74 @@ if alloc_vals:
     )
 else:
     st.info(f"Actual expenditure data for {selected_year} will be available after the fiscal year ends.")
+
+# ── Radar chart — Ministry comparison ─────────────────────────────────────────
+st.markdown("---")
+st.markdown(
+    "<div class='section-header'>🕸️ Ministry Budget Radar — Share of Total</div>",
+    unsafe_allow_html=True,
+)
+
+RADAR_MINISTRIES = [
+    "Defence", "Education", "Health & Family Welfare",
+    "Road Transport & Highways", "Railways", "Rural Development",
+    "Agriculture & Allied", "Jal Shakti / Water",
+]
+radar_years = [selected_year, BUDGET_YEARS[0]]  # selected vs 2015-16
+radar_colors = [ORANGE, "#2B5299"]
+
+fig_radar = go.Figure()
+for idx, yr in enumerate(radar_years):
+    yr_total = TOTAL_BUDGET[yr]
+    yr_data  = MINISTRY_ALLOCATIONS[yr]
+    vals = [
+        round(yr_data.get(m, {}).get("allocated", 0) / yr_total * 100, 2)
+        for m in RADAR_MINISTRIES
+    ]
+    vals.append(vals[0])  # close the polygon
+    cats = RADAR_MINISTRIES + [RADAR_MINISTRIES[0]]
+    fig_radar.add_trace(go.Scatterpolar(
+        r=vals, theta=cats,
+        name=yr,
+        mode="lines+markers",
+        line=dict(color=radar_colors[idx], width=2.5),
+        marker=dict(size=7, color=radar_colors[idx]),
+        fill="toself",
+        fillcolor=f"rgba({','.join(str(int(radar_colors[idx].lstrip('#')[i:i+2], 16)) for i in (0,2,4))},0.08)",
+        hovertemplate="%{theta}: %{r:.2f}%<extra>" + yr + "</extra>",
+    ))
+fig_radar.update_layout(
+    polar=dict(
+        bgcolor=PLOTLY_PLOT,
+        radialaxis=dict(
+            visible=True, range=[0, 16],
+            gridcolor=GRID_COLOR, tickcolor=TEXT_MUTED,
+            tickfont=dict(size=9, color=TEXT_MUTED),
+        ),
+        angularaxis=dict(
+            gridcolor=GRID_COLOR,
+            tickfont=dict(size=10, color=TEXT_SEC, family="DM Sans, sans-serif"),
+        ),
+    ),
+    paper_bgcolor=PLOTLY_PAPER,
+    font=dict(color=TEXT_PRIMARY, family="DM Sans, sans-serif"),
+    height=420,
+    margin=dict(l=60, r=60, t=30, b=30),
+    legend=dict(
+        bgcolor="rgba(250,246,236,0.9)", bordercolor=BORDER, borderwidth=1,
+        font=dict(color=TEXT_SEC, size=11), orientation="h", y=-0.12,
+    ),
+    showlegend=True,
+)
+st.plotly_chart(fig_radar, use_container_width=True)
+st.markdown(
+    insight_box(
+        f"Radar shows each ministry's share of total budget in <b>{selected_year}</b> vs <b>2015-16</b>. "
+        f"<b>Defence</b> remains the largest spoke; <b>Roads and Railways</b> have grown significantly "
+        f"— reflecting the infrastructure-first policy push. Areas near the centre represent consistently "
+        f"underfunded sectors."
+    ),
+    unsafe_allow_html=True,
+)
 
 st.markdown(footer_html(), unsafe_allow_html=True)
