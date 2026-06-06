@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m streamlit *)",
+      "Bash(streamlit *)",
+      "Bash(pip install *)",
+      "Bash(pip show *)",
+      "Bash(pip list *)",
+      "Bash(python -m py_compile *)",
+      "Bash(python -c *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(mkdir *)",
+      "Bash(del *)",
+      "PowerShell(*)"
+    ],
+    "deny": []
+  }
+}

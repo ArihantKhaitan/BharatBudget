@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 from utils.styling import (
     GLOBAL_CSS, footer_html, insight_box,
     ORANGE, TEAL, RED, TEXT_MUTED, NAVY_LIGHT, NAVY_CARD, TEXT_MAIN, BLUE_SOFT,
+    BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
 )
 from data.states import (
     STATE_METADATA, PER_CAPITA_TRANSFER_2023_24,
@@ -137,10 +138,10 @@ for _, row in df.iterrows():
             size=row["per_capita"] / max_pc * 50 + 6,
             color=row["per_capita"],
             colorscale=[
-                [0.0, "#1E3A5F"],
-                [0.3, "#4FC3F7"],
-                [0.6, "#FF9933"],
-                [1.0, "#E84040"],
+                [0.0, "#1A1A22"],
+                [0.3, "#7EB8FF"],
+                [0.6, ORANGE],
+                [1.0, "#FF4D4D"],
             ],
             cmin=df["per_capita"].min(),
             cmax=max_pc,
@@ -148,7 +149,7 @@ for _, row in df.iterrows():
             colorbar=dict(
                 title=dict(text="₹ per capita", font=dict(color=TEXT_MUTED, size=10)),
                 tickfont=dict(color=TEXT_MUTED, size=9),
-                bgcolor="#0B1437",
+                bgcolor=PLOTLY_PAPER,
                 len=0.5, y=0.5,
             ) if _ == 0 else {},
             opacity=0.85,
@@ -168,17 +169,17 @@ fig_map.update_geos(
     center=dict(lat=22.5, lon=82.5),
     projection_scale=4.8,
     showcoastlines=True,  coastlinecolor=NAVY_LIGHT,
-    showland=True,        landcolor="#131E3A",
-    showocean=True,       oceancolor="#0B1437",
-    showlakes=True,       lakecolor="#0B1437",
+    showland=True,        landcolor=PLOTLY_PLOT,
+    showocean=True,       oceancolor=PLOTLY_PAPER,
+    showlakes=True,       lakecolor=PLOTLY_PAPER,
     showcountries=True,   countrycolor=NAVY_LIGHT,
-    bgcolor="#0B1437",
+    bgcolor=PLOTLY_PAPER,
 )
 fig_map.update_layout(
-    paper_bgcolor="#0B1437",
+    paper_bgcolor=PLOTLY_PAPER,
     height=560,
     margin=dict(l=0, r=0, t=0, b=0),
-    geo=dict(bgcolor="#0B1437"),
+    geo=dict(bgcolor=PLOTLY_PAPER),
 )
 st.plotly_chart(fig_map, use_container_width=True)
 st.markdown(
@@ -215,8 +216,8 @@ fig_bar = go.Figure(go.Bar(
     hovertemplate="<b>%{y}</b><br>₹%{x:,} per capita<extra></extra>",
 ))
 fig_bar.update_layout(
-    paper_bgcolor="#0B1437",
-    plot_bgcolor="#131E3A",
+    paper_bgcolor=PLOTLY_PAPER,
+    plot_bgcolor=PLOTLY_PLOT,
     font=dict(color=TEXT_MAIN),
     height=760,
     margin=dict(l=10, r=120, t=10, b=10),
@@ -260,7 +261,7 @@ fig_abs = go.Figure(go.Bar(
     orientation="h",
     marker=dict(
         color=df_sorted_tt["total_transfer"],
-        colorscale=[[0, "#1E3A5F"], [1, "#FF9933"]],
+        colorscale=[[0, "#1A1A22"], [1, ORANGE]],
         showscale=False,
     ),
     text=[f"₹{v:.3f} L cr" for v in df_sorted_tt["total_transfer"]],
@@ -269,7 +270,7 @@ fig_abs = go.Figure(go.Bar(
     hovertemplate="<b>%{y}</b><br>₹%{x:.4f} L cr<extra></extra>",
 ))
 fig_abs.update_layout(
-    paper_bgcolor="#0B1437", plot_bgcolor="#131E3A",
+    paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
     font=dict(color=TEXT_MAIN), height=760,
     margin=dict(l=10, r=120, t=10, b=10),
     xaxis=dict(title="₹ Lakh Crore", gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
@@ -301,7 +302,7 @@ fig_fc = go.Figure(go.Bar(
     x=df_fc["fc_share"], y=df_fc["state"], orientation="h",
     marker=dict(
                 color=df_fc["fc_share"].tolist(),
-                colorscale=[[0, "#1E3A5F"], [1, "#4FC3F7"]],
+                colorscale=[[0, "#1A1A22"], [1, "#7EB8FF"]],
                 showscale=False),
     text=[f"{v:.3f}%" for v in df_fc["fc_share"]],
     textposition="outside",
@@ -310,7 +311,7 @@ fig_fc = go.Figure(go.Bar(
 ))
 
 fig_fc.update_layout(
-    paper_bgcolor="#0B1437", plot_bgcolor="#131E3A",
+    paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
     font=dict(color=TEXT_MAIN), height=680,
     margin=dict(l=10, r=80, t=10, b=10),
     xaxis=dict(title="% of divisible pool", gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
@@ -366,7 +367,7 @@ fig_sc2.add_trace(go.Scatter(
     line=dict(color="#9E9E9E", dash="dot", width=1.5), hoverinfo="skip",
 ))
 fig_sc2.update_layout(
-    paper_bgcolor="#0B1437", plot_bgcolor="#131E3A",
+    paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
     font=dict(color=TEXT_MAIN), height=400,
     margin=dict(l=16, r=16, t=10, b=16),
     xaxis=dict(title="Per-capita central transfer (₹)", gridcolor=NAVY_LIGHT,
@@ -420,14 +421,14 @@ transfer_vals  = list(TOTAL_TRANSFERS_BY_YEAR.values())
 
 fig_tt = go.Figure(go.Bar(
     x=transfer_years, y=transfer_vals,
-    marker=dict(color=transfer_vals, colorscale=[[0,"#1E3A5F"],[1,"#FF9933"]], showscale=False),
+    marker=dict(color=transfer_vals, colorscale=[[0,"#1A1A22"],[1,ORANGE]], showscale=False),
     text=[f"₹{v:.2f}" for v in transfer_vals],
     textposition="outside",
     textfont=dict(color=TEXT_MUTED, size=11),
     hovertemplate="%{x}: ₹%{y:.2f} L cr<extra></extra>",
 ))
 fig_tt.update_layout(
-    paper_bgcolor="#0B1437", plot_bgcolor="#131E3A",
+    paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
     font=dict(color=TEXT_MAIN), height=300,
     margin=dict(l=16, r=16, t=10, b=16),
     xaxis=dict(gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),

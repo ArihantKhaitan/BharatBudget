@@ -3,7 +3,11 @@
 import streamlit as st
 import pandas as pd
 
-from utils.styling import GLOBAL_CSS, footer_html, insight_box, ORANGE, TEAL, TEXT_MUTED, NAVY_CARD, NAVY_LIGHT
+from utils.styling import (
+    GLOBAL_CSS, footer_html, insight_box,
+    ORANGE, TEAL, TEXT_MUTED, NAVY_CARD, NAVY_LIGHT,
+    BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
+)
 from data.budget_data import (
     BUDGET_YEARS, TOTAL_BUDGET, MINISTRY_ALLOCATIONS, NOMINAL_GDP, MINISTRY_CATEGORIES, CATEGORY_COLORS
 )
@@ -156,14 +160,14 @@ with col_donut:
     fig_donut = go.Figure(go.Pie(
         labels=cat_labels, values=cat_totals,
         hole=0.55,
-        marker=dict(colors=colors, line=dict(width=1.5, color="#0B1437")),
+        marker=dict(colors=colors, line=dict(width=1.5, color=BG_PRIMARY)),
         textinfo="percent+label",
-        textfont=dict(color="#E8EDF5", size=11),
+        textfont=dict(color=BEIGE, size=11),
         hovertemplate="<b>%{label}</b><br>₹%{value:.2f} L cr (%{percent})<extra></extra>",
     ))
     fig_donut.update_layout(
-        paper_bgcolor="#0B1437", plot_bgcolor="#131E3A",
-        font=dict(color="#E8EDF5"),
+        paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
+        font=dict(color=BEIGE),
         height=360, margin=dict(l=0, r=0, t=10, b=0),
         showlegend=False,
     )
@@ -180,7 +184,7 @@ with col_cat_text:
               <div style='width:12px; height:12px; border-radius:3px;
                           background:{color}; margin-right:0.6rem; flex-shrink:0;'></div>
               <div>
-                <span style='color:#E8EDF5; font-size:0.88rem;'>{cat}</span><br>
+                <span style='color:{BEIGE}; font-size:0.88rem;'>{cat}</span><br>
                 <span style='color:{TEXT_MUTED}; font-size:0.78rem;'>
                   ₹{val:.2f} L cr &nbsp;·&nbsp; {pct:.1f}%
                 </span>
@@ -217,8 +221,8 @@ if alloc_vals:
     ))
     fig_cmp.update_layout(
         barmode="group",
-        paper_bgcolor="#0B1437", plot_bgcolor="#131E3A",
-        font=dict(color="#E8EDF5"),
+        paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
+        font=dict(color=BEIGE),
         height=360,
         margin=dict(l=16, r=16, t=24, b=80),
         legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color=TEXT_MUTED)),

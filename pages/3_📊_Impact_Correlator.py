@@ -60,19 +60,20 @@ def dual_axis_chart(years, spend_vals, outcome_vals,
     ))
     fig.update_layout(
         title=dict(text=title, font=dict(color=TEXT_MAIN, size=14), x=0.01),
-        paper_bgcolor="#0B1437",
-        plot_bgcolor="#131E3A",
+        paper_bgcolor=PLOTLY_PAPER,
+        plot_bgcolor=PLOTLY_PLOT,
         font=dict(color=TEXT_MAIN),
         height=360,
         margin=dict(l=16, r=60, t=48, b=16),
         legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color=TEXT_MUTED),
                     orientation="h", y=-0.18),
         xaxis=dict(gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
-        yaxis=dict(title=spend_label, gridcolor=NAVY_LIGHT,
-                   tickfont=dict(color=TEXT_MUTED), titlefont=dict(color=ORANGE)),
+        yaxis=dict(title=dict(text=spend_label, font=dict(color=ORANGE)),
+                   gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
         yaxis2=dict(
-            title=outcome_label, overlaying="y", side="right",
-            tickfont=dict(color=TEAL), titlefont=dict(color=TEAL),
+            title=dict(text=outcome_label, font=dict(color=TEAL)),
+            overlaying="y", side="right",
+            tickfont=dict(color=TEAL),
             autorange="reversed" if invert_outcome else True,
             gridcolor="rgba(0,0,0,0)",
         ),
@@ -416,7 +417,7 @@ for i, (indicator, before, after, change, color) in enumerate(scorecard):
               <div style='display:flex; justify-content:space-between; margin-top:0.3rem;'>
                 <span style='color:#8B9CC7; font-size:0.82rem;'>{before}</span>
                 <span style='color:{TEXT_MUTED};'>→</span>
-                <span style='color:#E8EDF5; font-size:0.9rem; font-weight:600;'>{after}</span>
+                <span style='color:{BEIGE}; font-size:0.9rem; font-weight:600;'>{after}</span>
               </div>
               <div style='color:{color}; font-size:0.75rem; margin-top:0.3rem;
                           font-weight:600;'>{change}</div>

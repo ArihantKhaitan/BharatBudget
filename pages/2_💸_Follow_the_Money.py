@@ -5,7 +5,11 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
-from utils.styling import GLOBAL_CSS, footer_html, insight_box, ORANGE, TEAL, RED, TEXT_MUTED, NAVY_LIGHT, NAVY_CARD
+from utils.styling import (
+    GLOBAL_CSS, footer_html, insight_box,
+    ORANGE, ORANGE_LIGHT, TEAL, RED, TEXT_MUTED, NAVY_LIGHT, NAVY_CARD,
+    BEIGE, BEIGE_MUTED, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
+)
 from data.budget_data import BUDGET_YEARS, MINISTRY_ALLOCATIONS, TOTAL_BUDGET, COMPARISON_MINISTRIES
 from components.charts import multiline_chart, yoy_bar
 
@@ -35,12 +39,12 @@ MINISTRY_COLORS = {
     "Health & Family Welfare":   "#BA68C8",
     "Agriculture & Allied":      "#81C784",
     "Railways":                  "#FFB347",
-    "Road Transport & Highways": "#FF9933",
+    "Road Transport & Highways": ORANGE,
     "Rural Development":         "#00C49A",
     "Jal Shakti / Water":        "#29B6F6",
 }
 
-PALETTE = ["#FF9933","#E84040","#4FC3F7","#00C49A","#BA68C8","#81C784","#FFB347","#29B6F6"]
+PALETTE = [ORANGE, "#E84040", "#7EB8FF", "#00C49A", "#C07BDB", "#6DBF7E", "#FF9A4D", "#4DC8E8"]
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
@@ -158,8 +162,8 @@ fig_ratio.add_trace(go.Bar(
 fig_ratio.add_hline(y=1.0, line_dash="dot", line_color=ORANGE, opacity=0.7,
                     annotation_text="1:1 parity", annotation_font_color=ORANGE)
 fig_ratio.update_layout(
-    paper_bgcolor="#0B1437", plot_bgcolor="#131E3A",
-    font=dict(color="#E8EDF5"),
+    paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
+    font=dict(color=BEIGE),
     height=300,
     margin=dict(l=16, r=16, t=10, b=16),
     xaxis=dict(gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
