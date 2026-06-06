@@ -88,7 +88,7 @@ fig_tree = treemap_chart(
     year_data, value_key=value_key,
     title=f"Ministry-wise Budget — {selected_year} ({view_type})"
 )
-st.plotly_chart(fig_tree, use_container_width=True)
+st.plotly_chart(fig_tree, width='stretch')
 st.markdown(
     insight_box(
         f"The treemap shows every ministry's share of the ₹{total_val:.2f} L cr budget. "
@@ -108,7 +108,7 @@ st.markdown(
 
 fig_bar = bar_top10(year_data, value_key=value_key,
                     title=f"Top 10 — {selected_year}", total=total_val)
-st.plotly_chart(fig_bar, use_container_width=True)
+st.plotly_chart(fig_bar, width='stretch')
 
 # Build top-10 table
 rows = sorted(
@@ -122,7 +122,7 @@ df_top["Amount (₹ L cr)"] = df_top["Amount (₹ L cr)"].apply(lambda x: f"₹{
 df_top["% of Budget"] = df_top["% of Budget"].apply(lambda x: f"{x:.1f}%")
 df_top.index = range(1, 11)
 
-st.dataframe(df_top, use_container_width=True)
+st.dataframe(df_top, width='stretch')
 
 # ── Category donut ────────────────────────────────────────────────────────────
 st.markdown("<br>", unsafe_allow_html=True)
@@ -157,7 +157,7 @@ with col_donut:
         height=360, margin=dict(l=0, r=0, t=10, b=0),
         showlegend=False,
     )
-    st.plotly_chart(fig_donut, use_container_width=True)
+    st.plotly_chart(fig_donut, width='stretch')
 
 with col_cat_text:
     st.markdown("<br><br>", unsafe_allow_html=True)
@@ -214,7 +214,7 @@ if alloc_vals:
         xaxis=dict(gridcolor=NAVY_LIGHT, tickangle=-30, tickfont=dict(size=10, color=TEXT_MUTED)),
         yaxis=dict(title="₹ Lakh Crore", gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
     )
-    st.plotly_chart(fig_cmp, use_container_width=True)
+    st.plotly_chart(fig_cmp, width='stretch')
     st.markdown(
         insight_box(
             "Bars where <b>actual spend < allocated</b> mean the ministry didn't fully use its budget — "
@@ -284,7 +284,7 @@ fig_radar.update_layout(
     ),
     showlegend=True,
 )
-st.plotly_chart(fig_radar, use_container_width=True)
+st.plotly_chart(fig_radar, width='stretch')
 st.markdown(
     insight_box(
         f"Radar shows each ministry's share of total budget in <b>{selected_year}</b> vs <b>2015-16</b>. "

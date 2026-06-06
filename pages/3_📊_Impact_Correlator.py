@@ -1,4 +1,4 @@
-"""Impact Correlator — Does more spending actually improve outcomes?"""
+﻿"""Impact Correlator — Does more spending actually improve outcomes?"""
 
 import streamlit as st
 import pandas as pd
@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from utils.styling import (
     footer_html, insight_box, page_header,
     ORANGE, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_LIGHT, NAVY_CARD, TEXT_MAIN,
-    PLOTLY_PAPER, PLOTLY_PLOT,
+    PLOTLY_PAPER, PLOTLY_PLOT, BG_SURFACE, BORDER,
 )
 from data.budget_data import BUDGET_YEARS, MINISTRY_ALLOCATIONS, TOTAL_BUDGET
 from data.indicators import (
@@ -16,7 +16,6 @@ from data.indicators import (
     HIGHWAY_LENGTH_KM, RAILWAY_ELECTRIFICATION, GROSS_ENROLMENT_RATIO_HE,
     OUT_OF_POCKET_HEALTH_PCT, AGRI_GDP_GROWTH, TAP_WATER_COVERAGE,
     SCHOOL_DROPOUT_RATE, MATERNAL_MORTALITY_RATE, LIFE_EXPECTANCY,
-    PM_KISAN_BENEFICIARIES,
 )
 from components.charts import scatter_correlation
 
@@ -120,7 +119,7 @@ with tab1a:
         "Health Budget (₹ L cr)", "Infant Mortality Rate (per 1,000 births)",
         "Health Budget ↑ vs Infant Mortality ↓", invert_outcome=False,
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"India's health budget grew from <b>₹0.33 L cr (2015-16)</b> to "
@@ -138,7 +137,7 @@ with tab1b:
         "Health Budget (₹ L cr)", "Out-of-Pocket Cost (% of total health spend)",
         "Public Health Spending vs Out-of-Pocket Burden", invert_outcome=False,
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"As public health spending increased, out-of-pocket costs fell from "
@@ -155,7 +154,7 @@ with tab1c:
         x_label="Health Budget (₹ L cr)", y_label="Life Expectancy (years)",
         title="Health Spending vs Life Expectancy", trendline=True,
     )
-    st.plotly_chart(fig_sc, use_container_width=True)
+    st.plotly_chart(fig_sc, width='stretch')
     st.markdown(
         insight_box(
             f"Life expectancy has risen from <b>68.3 years (2015-16)</b> to <b>~71.4 years</b> "
@@ -192,7 +191,7 @@ with tab2a:
         "Education Budget (₹ L cr)", "Literacy Rate (%)",
         "Education Spending vs Adult Literacy Rate",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"India's literacy rate improved from <b>73.5%</b> to <b>~80%</b> over the decade "
@@ -209,7 +208,7 @@ with tab2b:
         "Education Budget (₹ L cr)", "Higher Education GER (%)",
         "Education Spending vs Gross Enrolment Ratio (Higher Ed)",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"Gross Enrolment Ratio in Higher Education rose from <b>24.5%</b> (2015-16) "
@@ -226,7 +225,7 @@ with tab2c:
         "Education Spending vs Dropout Rate",
         invert_outcome=False,
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"School dropout rates at secondary level fell from <b>17.1%</b> to <b>~10%</b> "
@@ -265,7 +264,7 @@ with tab3a:
         "Roads Budget (₹ L cr)", "National Highways (thousand km)",
         "Road Investment vs Highway Network Growth",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"India's roads budget grew <b>6.6×</b> from ₹0.42 L cr to ₹2.78 L cr. "
@@ -282,7 +281,7 @@ with tab3b:
         "Railways Budget (₹ L cr)", "Electrified Route (thousand km)",
         "Railway Investment vs Network Electrification",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"Railways capital budget jumped <b>6.4×</b> from ₹0.40 L cr to ₹2.55 L cr. "
@@ -302,7 +301,7 @@ with tab3c:
         y_label="Real GDP Growth (%)",
         title="Infrastructure Spending vs GDP Growth Rate",
     )
-    st.plotly_chart(fig_sc, use_container_width=True)
+    st.plotly_chart(fig_sc, width='stretch')
     st.markdown(
         insight_box(
             f"The 2020-21 outlier (GDP: <b>-6.6%</b>) was caused by COVID-19, not infra spending. "
@@ -327,7 +326,6 @@ agri_spend   = [MINISTRY_ALLOCATIONS[y]["Agriculture & Allied"]["allocated"] for
 water_spend  = [MINISTRY_ALLOCATIONS[y]["Jal Shakti / Water"]["allocated"] for y in YEARS_COMMON]
 agri_growth  = [AGRI_GDP_GROWTH[y] for y in YEARS_COMMON]
 tap_cov      = [TAP_WATER_COVERAGE[y] for y in YEARS_COMMON]
-pmk_ben      = [PM_KISAN_BENEFICIARIES[y] for y in YEARS_COMMON]
 
 tab4a, tab4b = st.tabs([
     "Water Budget vs Tap Water Coverage",
@@ -340,7 +338,7 @@ with tab4a:
         "Jal Shakti Budget (₹ L cr)", "Households with Tap Water (%)",
         "Water Spending vs Tap Water Coverage (Jal Jeevan Mission)",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"<b>Jal Jeevan Mission</b> (launched 2019) is arguably India's most impactful "
@@ -357,7 +355,7 @@ with tab4b:
         "Agriculture Budget (₹ L cr)", "Agricultural GDP Growth (%)",
         "Agriculture Spending vs Farm Sector Growth",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(
         insight_box(
             f"Agricultural growth is highly <b>volatile</b> — driven more by monsoons than spending. "
@@ -391,14 +389,14 @@ for i, (indicator, before, after, change, color) in enumerate(scorecard):
     with cols_sc[i % 4]:
         st.markdown(
             f"""
-            <div style='background:{NAVY_CARD}; border:1px solid {NAVY_LIGHT};
+            <div style='background:{BG_SURFACE}; border:1px solid {BORDER};
                         border-left:3px solid {color}; border-radius:10px;
                         padding:0.8rem; margin-bottom:0.6rem;'>
               <div style='font-size:0.75rem; color:{TEXT_MUTED};'>{indicator}</div>
               <div style='display:flex; justify-content:space-between; margin-top:0.3rem;'>
-                <span style='color:#8B9CC7; font-size:0.82rem;'>{before}</span>
+                <span style='color:{TEXT_SEC}; font-size:0.82rem;'>{before}</span>
                 <span style='color:{TEXT_MUTED};'>→</span>
-                <span style='color:{BEIGE}; font-size:0.9rem; font-weight:600;'>{after}</span>
+                <span style='color:{TEXT_PRIMARY}; font-size:0.9rem; font-weight:600;'>{after}</span>
               </div>
               <div style='color:{color}; font-size:0.75rem; margin-top:0.3rem;
                           font-weight:600;'>{change}</div>

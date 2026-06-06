@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from utils.styling import (
     footer_html, insight_box, page_header,
     ORANGE, ORANGE_LIGHT, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY,
-    NAVY_LIGHT, NAVY_CARD, BEIGE, BEIGE_MUTED, PLOTLY_PAPER, PLOTLY_PLOT,
+    NAVY_LIGHT, BEIGE, PLOTLY_PAPER, PLOTLY_PLOT,
     BORDER, GRID_COLOR,
 )
 from data.budget_data import BUDGET_YEARS, MINISTRY_ALLOCATIONS, TOTAL_BUDGET, COMPARISON_MINISTRIES
@@ -56,14 +56,10 @@ selected_ministries = st.multiselect(
     COMPARISON_MINISTRIES,
     default=["Defence", "Education", "Health & Family Welfare", "Road Transport & Highways"],
 )
-c_opt1, c_opt2 = st.columns(2)
-with c_opt1:
-    show_pct_gdp = st.checkbox("Show as % of total budget", value=False)
-with c_opt2:
-    focus_ministry = st.selectbox("Deep-dive ministry (YoY chart)", COMPARISON_MINISTRIES, index=0)
+show_pct_gdp = st.checkbox("Show as % of total budget", value=False)
 
 if not selected_ministries:
-    st.warning("Please select at least one ministry from the sidebar.")
+    st.warning("Please select at least one ministry from the dropdown above.")
     st.stop()
 
 df = build_ministry_df(selected_ministries)
@@ -90,7 +86,7 @@ fig_trend = multiline_chart(
     plot_df, x_col="year", y_cols=selected_ministries,
     title=title, y_label=y_label, color_map=MINISTRY_COLORS,
 )
-st.plotly_chart(fig_trend, use_container_width=True)
+st.plotly_chart(fig_trend, width='stretch')
 
 # Auto-generated insight
 if "Defence" in selected_ministries and "Education" in selected_ministries:
@@ -162,7 +158,7 @@ fig_ratio.update_layout(
     yaxis=dict(title=f"Ratio ({m_numerator[:20]} ÷ {m_denom[:20]})",
                gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
 )
-st.plotly_chart(fig_ratio, use_container_width=True)
+st.plotly_chart(fig_ratio, width='stretch')
 
 if ratio_vals:
     direction = "increased" if ratio_vals[-1] > ratio_vals[0] else "decreased"
@@ -179,9 +175,15 @@ if ratio_vals:
 # ── YoY % change deep-dive ────────────────────────────────────────────────────
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown(
-    f"<div class='section-header'>📊 Year-on-Year % Change: {focus_ministry}</div>",
+    "<div class='section-header'>📊 Year-on-Year % Change — Single Ministry Deep Dive</div>",
     unsafe_allow_html=True,
 )
+st.markdown(
+    f"<p style='font-family:\"DM Sans\",sans-serif; font-size:0.85rem; color:{TEXT_SEC}; margin:-0.3rem 0 0.6rem 0;'>"
+    f"Pick any ministry to see how its budget changed each year — green = increase, red = cut.</p>",
+    unsafe_allow_html=True,
+)
+focus_ministry = st.selectbox("Ministry to deep-dive", COMPARISON_MINISTRIES, index=0)
 
 focus_df = pd.DataFrame([
     {"year": y, "allocated": MINISTRY_ALLOCATIONS[y].get(focus_ministry, {}).get("allocated")}
@@ -189,7 +191,7 @@ focus_df = pd.DataFrame([
 ]).dropna(subset=["allocated"])
 
 fig_yoy = yoy_bar(focus_df, focus_ministry)
-st.plotly_chart(fig_yoy, use_container_width=True)
+st.plotly_chart(fig_yoy, width='stretch')
 
 vals_focus = focus_df["allocated"].tolist()
 max_jump   = max(zip(focus_df["year"].tolist()[1:],
@@ -233,6 +235,6 @@ for r in table_rows:
     del r["_chg"]
 
 if table_rows:
-    st.dataframe(pd.DataFrame(table_rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(table_rows), width='stretch', hide_index=True)
 
 st.markdown(footer_html(), unsafe_allow_html=True)

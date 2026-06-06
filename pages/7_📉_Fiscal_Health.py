@@ -1,4 +1,4 @@
-"""Fiscal Health — Deficit, Debt, and India's financial sustainability."""
+﻿"""Fiscal Health — Deficit, Debt, and India's financial sustainability."""
 
 import streamlit as st
 import pandas as pd
@@ -7,15 +7,14 @@ import plotly.graph_objects as go
 from utils.styling import (
     footer_html, insight_box, page_header,
     ORANGE, ORANGE_LIGHT, TEAL, RED, BLUE_SOFT, TEXT_PRIMARY, TEXT_SEC, TEXT_MUTED,
-    BORDER, GRID_COLOR, PLOTLY_PAPER, PLOTLY_PLOT, BG_ELEVATED,
+    BORDER, GRID_COLOR, PLOTLY_PAPER, PLOTLY_PLOT,
 )
 from data.fiscal import (
     BUDGET_YEARS, FISCAL_DEFICIT_LCR, FISCAL_DEFICIT_PCT_GDP,
-    REVENUE_DEFICIT_LCR, REVENUE_DEFICIT_PCT_GDP,
     CENTRAL_GOVT_DEBT_LCR, DEBT_TO_GDP_PCT,
-    NET_BORROWINGS_LCR, CAPITAL_EXPENDITURE_LCR,
-    REVENUE_EXPENDITURE_LCR, NOMINAL_GDP_LCR,
-    INTEREST_AS_PCT_REVENUE, STATE_FISCAL_DEFICIT_PCT_GDP,
+    CAPITAL_EXPENDITURE_LCR,
+    REVENUE_EXPENDITURE_LCR,
+    INTEREST_AS_PCT_REVENUE,
 )
 
 st.markdown(
@@ -43,8 +42,9 @@ with c3:
     st.metric("Capital Expenditure 2024-25", f"₹{capex:.2f} L cr",
               f"{capex/total*100:.1f}% of total expenditure")
 with c4:
-    st.metric("Interest as % of Revenue", f"{INTEREST_AS_PCT_REVENUE[latest]:.1f}%",
-              "Every ₹3 spent, ₹1 is interest")
+    _interest_val = INTEREST_AS_PCT_REVENUE[latest]
+    st.metric("Interest as % of Revenue", f"{_interest_val:.1f}%",
+              f"Every ₹{100/_interest_val:.1f} of revenue, ₹1 is interest")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -90,7 +90,7 @@ fig_fd.update_layout(
                 overlaying="y", side="right",
                 tickfont=dict(color=BLUE_SOFT), gridcolor="rgba(0,0,0,0)"),
 )
-st.plotly_chart(fig_fd, use_container_width=True)
+st.plotly_chart(fig_fd, width='stretch')
 st.markdown(insight_box(
     "India's FRBM (Fiscal Responsibility) target is <b>3% of GDP by 2025-26</b>. "
     "The <b>COVID-19 year (2020-21)</b> blew out the deficit to <b>9.4% of GDP</b> — the worst since liberalisation. "
@@ -137,7 +137,7 @@ fig_debt.update_layout(
                 tickfont=dict(color=RED), gridcolor="rgba(0,0,0,0)",
                 range=[40, 70]),
 )
-st.plotly_chart(fig_debt, use_container_width=True)
+st.plotly_chart(fig_debt, width='stretch')
 st.markdown(insight_box(
     "India's central government debt crossed the <b>IMF's 60% GDP warning threshold in 2020-21</b> "
     "due to COVID borrowings. It's now declining — projected at <b>53.8% in 2024-25</b>. "
@@ -189,7 +189,7 @@ fig_cr.update_layout(
                 overlaying="y", side="right",
                 tickfont=dict(color=ORANGE), gridcolor="rgba(0,0,0,0)"),
 )
-st.plotly_chart(fig_cr, use_container_width=True)
+st.plotly_chart(fig_cr, width='stretch')
 st.markdown(insight_box(
     "<b>Capital expenditure creates assets</b> (roads, bridges, schools); "
     "<b>revenue expenditure pays salaries, pensions, interest</b>. "
@@ -230,7 +230,7 @@ fig_int.update_layout(
     yaxis=dict(title=dict(text="% of Revenue Receipts", font=dict(color=TEXT_SEC)),
                gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC), range=[28, 52]),
 )
-st.plotly_chart(fig_int, use_container_width=True)
+st.plotly_chart(fig_int, width='stretch')
 st.markdown(insight_box(
     "India spends roughly <b>₹1 in every ₹3 of revenue on just paying interest</b> on past debt. "
     "This 'interest burden' peaked at <b>47.2%</b> in 2020-21. "

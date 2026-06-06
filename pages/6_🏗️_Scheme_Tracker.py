@@ -1,4 +1,4 @@
-"""Flagship Scheme Tracker — Are government schemes reaching people?"""
+﻿"""Flagship Scheme Tracker — Are government schemes reaching people?"""
 
 import streamlit as st
 import pandas as pd
@@ -11,7 +11,7 @@ from utils.styling import (
 )
 from data.schemes import (
     BUDGET_YEARS,
-    MGNREGA_EXPENDITURE_LCR, MGNREGA_HOUSEHOLDS_CR, MGNREGA_AVG_DAYS,
+    MGNREGA_EXPENDITURE_LCR, MGNREGA_HOUSEHOLDS_CR,
     PM_KISAN_EXPENDITURE_LCR, PM_KISAN_BENEFICIARIES_CR,
     PMJAY_EXPENDITURE_LCR, PMJAY_CLAIMS_CR,
     PMAYG_HOUSES_COMPLETED_LAKH, PMAYG_EXPENDITURE_LCR,
@@ -59,12 +59,10 @@ for i, (name, stat1, stat2, spend) in enumerate(schemes_overview):
 st.markdown("---")
 
 # ── Page controls (inline) ────────────────────────────────────────────────────
-c_sc, _ = st.columns([2, 2])
-with c_sc:
-    scheme_choice = st.selectbox("Select Scheme to Deep Dive", [
-        "MGNREGA", "PM-KISAN", "Ayushman Bharat PM-JAY",
-        "PM Awas Yojana Gramin", "Jal Jeevan Mission", "PM Ujjwala Yojana",
-    ])
+scheme_choice = st.selectbox("Select Scheme to Deep Dive", [
+    "MGNREGA", "PM-KISAN", "Ayushman Bharat PM-JAY",
+    "PM Awas Yojana Gramin", "Jal Jeevan Mission", "PM Ujjwala Yojana",
+])
 
 # ── Deep-dive on selected scheme ─────────────────────────────────────────────
 st.markdown(
@@ -117,7 +115,7 @@ if scheme_choice == "MGNREGA":
         "Expenditure (₹ L cr)", "Households Employed (cr)",
         ORANGE, TEAL, " L cr", " cr",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(insight_box(
         "MGNREGA — India's largest rural employment guarantee — peaked at <b>₹1.11 L cr</b> in 2020-21 "
         "when <b>7.5 crore households</b> relied on it during COVID lockdowns. "
@@ -144,7 +142,7 @@ if scheme_choice == "MGNREGA":
                    gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
         yaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
     )
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width='stretch')
 
 elif scheme_choice == "PM-KISAN":
     yrs = [y for y in BUDGET_YEARS if PM_KISAN_EXPENDITURE_LCR.get(y) is not None]
@@ -154,7 +152,7 @@ elif scheme_choice == "PM-KISAN":
         "Expenditure (₹ L cr)", "Farmer Beneficiaries (cr)",
         "#3A7D3A", ORANGE, " L cr", " cr",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(insight_box(
         "PM-KISAN provides <b>₹6,000 per year (₹500/month)</b> to ~11 crore farmers. "
         "Annual expenditure is capped near <b>₹0.66 L cr</b> — stable since 2022. "
@@ -169,7 +167,7 @@ elif scheme_choice == "Ayushman Bharat PM-JAY":
         "Expenditure (₹ L cr)", "Hospitalisation Claims (cr)",
         "#7B3A9E", ORANGE, " L cr", " cr",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(insight_box(
         "Ayushman Bharat PM-JAY — the world's largest government-funded health insurance — covers "
         "<b>₹5 lakh per family per year</b> for secondary and tertiary hospitalisation. "
@@ -185,7 +183,7 @@ elif scheme_choice == "PM Awas Yojana Gramin":
         "Expenditure (₹ L cr)", "Houses Completed (lakh)",
         "#9A7000", ORANGE, " L cr", " lakh",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(insight_box(
         "PMAY-G targets <b>pucca (permanent) housing</b> for rural poor. "
         "Peak completion was 85 lakh houses in 2018-19. COVID disrupted construction in 2020-21. "
@@ -212,7 +210,7 @@ elif scheme_choice == "PM Awas Yojana Gramin":
                    gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
         yaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
     )
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width='stretch')
 
 elif scheme_choice == "Jal Jeevan Mission":
     yrs = BUDGET_YEARS
@@ -222,7 +220,7 @@ elif scheme_choice == "Jal Jeevan Mission":
         "Expenditure (₹ L cr)", "Cumulative Tap Connections (cr)",
         "#0A7A9A", ORANGE, " L cr", " cr",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(insight_box(
         "Launched in 2019, Jal Jeevan Mission aims for <b>'Har Ghar Jal' — tap water to every rural home</b>. "
         "Coverage surged from 3.2 cr connections (2019-20) to <b>15.2 cr</b> (2024-25). "
@@ -237,7 +235,7 @@ elif scheme_choice == "PM Ujjwala Yojana":
         "Expenditure (₹ L cr)", "LPG Connections (cr)",
         "#E06820", TEAL, " L cr", " cr",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.markdown(insight_box(
         "PM Ujjwala Yojana gave <b>free LPG connections to BPL (Below Poverty Line) households</b>, "
         "primarily targeting women in rural areas. Over <b>10 crore connections</b> provided. "

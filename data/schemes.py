@@ -26,15 +26,17 @@ MGNREGA_AVG_DAYS = {
 }
 
 # ── PM-KISAN (launched Feb 2019) ─────────────────────────────────────────────
+# 2018-19 is the partial launch year (~40 days, Feb 24–Mar 31 2019): only ~1 cr farmers,
+# one installment of ₹2,000 ≈ ₹2,000 cr. Revised to reflect actual partial-year spend.
 PM_KISAN_EXPENDITURE_LCR = {
     "2015-16": None, "2016-17": None, "2017-18": None,
-    "2018-19": 0.20, "2019-20": 0.48,
+    "2018-19": 0.020, "2019-20": 0.48,
     "2020-21": 0.60, "2021-22": 0.67,
     "2022-23": 0.66, "2023-24": 0.66, "2024-25": 0.66,
 }
 PM_KISAN_BENEFICIARIES_CR = {
     "2015-16": None, "2016-17": None, "2017-18": None,
-    "2018-19": 3.2,  "2019-20": 7.5,
+    "2018-19": 1.0,  "2019-20": 7.5,
     "2020-21": 10.2, "2021-22": 11.3,
     "2022-23": 11.0, "2023-24": 11.0, "2024-25": 11.0,
 }
@@ -66,6 +68,7 @@ PMAYG_EXPENDITURE_LCR = {
 }
 
 # ── Jal Jeevan Mission — tap connections provided (crore cumulative) ──────────
+# JJM launched Aug 2019; pre-2019 figures are from predecessor NRDWP scheme.
 JJM_TAP_CONNECTIONS_CR_CUMULATIVE = {
     "2015-16": 1.8,  "2016-17": 2.0,  "2017-18": 2.2,
     "2018-19": 2.5,  "2019-20": 3.2,

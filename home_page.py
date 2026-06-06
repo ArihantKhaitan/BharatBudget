@@ -1,6 +1,7 @@
-"""BharatBudget — home page."""
+﻿"""BharatBudget — home page."""
 
 import streamlit as st
+import pandas as pd  # noqa: F401 — must be imported before plotly validates arrays
 import plotly.graph_objects as go
 
 from utils.styling import (
@@ -16,7 +17,7 @@ from data.budget_data import TOTAL_BUDGET, BUDGET_YEARS, MINISTRY_ALLOCATIONS, N
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
     page_header(
-        "🇮🇳",
+        "",
         "BharatBudget",
         "India's public finance — made simple, visual, and useful for every citizen. Follow the money across ministries, years, and states.",
     ),
@@ -184,7 +185,7 @@ fig_overview.update_layout(
     ),
     barmode="group",
 )
-st.plotly_chart(fig_overview, use_container_width=True)
+st.plotly_chart(fig_overview, width='stretch')
 st.markdown(
     insight_box(
         "India's Union Budget has grown <b>2.68×</b> in 10 years — from ₹17.78 L cr (2015-16) to "

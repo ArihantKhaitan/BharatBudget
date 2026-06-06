@@ -1,9 +1,8 @@
-"""Tax Revenue Tracker — Where does India's tax money come FROM?"""
+﻿"""Tax Revenue Tracker — Where does India's tax money come FROM?"""
 
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 
 from utils.styling import (
     footer_html, insight_box, page_header,
@@ -14,7 +13,7 @@ from data.tax_revenue import (
     BUDGET_YEARS, GROSS_TAX_REVENUE, CORPORATION_TAX, INCOME_TAX,
     GST_CENTRE_SHARE, CUSTOMS_DUTY, EXCISE_DUTY,
     TAX_DEVOLVED_TO_STATES, STATE_GST_CONTRIBUTION_2023_24,
-    FILING_COMPLIANCE_PCT, ITR_FILERS_CR,
+    ITR_FILERS_CR,
 )
 
 st.markdown(
@@ -107,7 +106,7 @@ fig_stack.update_layout(
     yaxis=dict(title=dict(text="₹ Lakh Crore", font=dict(color=TEXT_SEC)),
                gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
 )
-st.plotly_chart(fig_stack, use_container_width=True)
+st.plotly_chart(fig_stack, width='stretch')
 st.markdown(
     insight_box(
         "India's tax mix has shifted dramatically. Before GST (2017), customs and excise dominated. "
@@ -163,11 +162,13 @@ fig_di.update_layout(
                gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC),
                range=[30, 70]),
 )
-st.plotly_chart(fig_di, use_container_width=True)
+st.plotly_chart(fig_di, width='stretch')
+_dt_latest = direct_pct[-1]
+_dt_earliest = direct_pct[0]
 st.markdown(
     insight_box(
-        "Direct taxes (paid by corporates and individuals directly) rose from <b>52%</b> (2015-16) "
-        "to <b>~58%</b> (2024-25) of the tax mix. "
+        f"Direct taxes (paid by corporates and individuals directly) rose from <b>{_dt_earliest:.0f}%</b> (2015-16) "
+        f"to <b>~{_dt_latest:.0f}%</b> (2024-25) of the tax mix. "
         "A higher direct-tax share is considered more equitable — "
         "indirect taxes like GST are regressive as they fall equally on rich and poor."
     ),
@@ -195,22 +196,22 @@ fig_gst = go.Figure(go.Bar(
         colorscale=[[0, BG_ELEVATED], [0.4, ORANGE_LIGHT], [1, ORANGE]],
         showscale=False,
     ),
-    text=[f"₹{v:.0f}k cr  ({s:.1f}%)" for v, s in
+    text=[f"₹{v:.0f} ({s:.1f}%)" for v, s in
           zip(gst_df["GST Collection (₹ Th cr)"], gst_df["Share %"])],
     textposition="outside",
     textfont=dict(color=TEXT_SEC, size=10),
-    hovertemplate="%{y}: ₹%{x:.1f}k cr<extra></extra>",
+    hovertemplate="%{y}: ₹%{x:.1f} Th cr<extra></extra>",
 ))
 fig_gst.update_layout(
     paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
     font=dict(color=TEXT_PRIMARY, family="DM Sans, sans-serif"),
     height=520,
-    margin=dict(l=8, r=120, t=12, b=8),
+    margin=dict(l=8, r=160, t=12, b=8),
     xaxis=dict(title=dict(text="₹ Thousand Crore", font=dict(color=TEXT_SEC)),
                gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
     yaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
 )
-st.plotly_chart(fig_gst, use_container_width=True)
+st.plotly_chart(fig_gst, width='stretch')
 
 col_a, col_b = st.columns(2)
 with col_a:
@@ -240,41 +241,29 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-fig_itr = go.Figure()
-fig_itr.add_trace(go.Bar(
-    x=BUDGET_YEARS, y=[ITR_FILERS_CR[y] for y in BUDGET_YEARS],
-    marker=dict(color=[ORANGE_LIGHT]*8 + [ORANGE]*2),
-    text=[f"{v:.1f} cr" for v in [ITR_FILERS_CR[y] for y in BUDGET_YEARS]],
+_itr_vals = [ITR_FILERS_CR[y] for y in BUDGET_YEARS]
+fig_itr = go.Figure(go.Bar(
+    x=BUDGET_YEARS, y=_itr_vals,
+    marker=dict(
+        color=_itr_vals,
+        colorscale=[[0, "#1A1A22"], [0.5, ORANGE_LIGHT], [1, ORANGE]],
+        showscale=False,
+    ),
+    text=[f"{v:.1f} cr" for v in _itr_vals],
     textposition="outside",
     textfont=dict(color=TEXT_SEC, size=10),
     hovertemplate="%{x}: %{y:.1f} crore filers<extra></extra>",
-    name="ITR Filers",
-))
-fig_itr.add_trace(go.Scatter(
-    x=BUDGET_YEARS, y=[FILING_COMPLIANCE_PCT[y] for y in BUDGET_YEARS],
-    name="Compliance %", yaxis="y2",
-    mode="lines+markers",
-    line=dict(color=TEAL, width=2, dash="dot"),
-    marker=dict(size=6, color=TEAL),
-    hovertemplate="%{x}: %{y:.0f}% compliance<extra></extra>",
 ))
 fig_itr.update_layout(
     paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
     font=dict(color=TEXT_PRIMARY, family="DM Sans, sans-serif"),
     height=300,
-    margin=dict(l=8, r=60, t=12, b=8),
-    legend=dict(bgcolor="rgba(245,237,216,0.9)", bordercolor=BORDER,
-                borderwidth=1, font=dict(color=TEXT_SEC, size=11),
-                orientation="h", y=1.12),
+    margin=dict(l=8, r=16, t=12, b=8),
     xaxis=dict(gridcolor=GRID_COLOR, linecolor=BORDER, tickfont=dict(color=TEXT_SEC)),
     yaxis=dict(title=dict(text="Crore Filers", font=dict(color=TEXT_SEC)),
                gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
-    yaxis2=dict(title=dict(text="Compliance %", font=dict(color=TEAL)),
-                overlaying="y", side="right",
-                tickfont=dict(color=TEAL),
-                gridcolor="rgba(0,0,0,0)"),
 )
-st.plotly_chart(fig_itr, use_container_width=True)
+st.plotly_chart(fig_itr, width='stretch')
 st.markdown(
     insight_box(
         "ITR filers have more than <b>doubled</b> from 3.7 crore (2015-16) to 8.9 crore (2024-25), "

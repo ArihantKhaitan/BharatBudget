@@ -51,8 +51,9 @@ INCOME_TAX = {
     "2024-25": 11.87,
 }
 
-# GST — Centre's share (CGST + Centre's 50% of IGST). Pre-GST era: None.
-# GST launched 1 July 2017; 2017-18 is partial year Centre share.
+# GST — Centre's gross CGST receipts (before IGST cross-utilisation settlement).
+# True Centre receipts incl. IGST share are ~15-20% higher; these are conservative.
+# GST launched 1 July 2017; 2017-18 is partial year.
 GST_CENTRE_SHARE = {
     "2015-16": None,
     "2016-17": None,
@@ -110,6 +111,7 @@ TAX_DEVOLVED_TO_STATES = {
 }
 
 # State-wise GST contribution FY 2023-24 (₹ Thousand Crore, approx)
+# Note: covers ~20 major states only; not a complete national total.
 STATE_GST_CONTRIBUTION_2023_24 = {
     "Maharashtra":     165.0,
     "Karnataka":        90.0,

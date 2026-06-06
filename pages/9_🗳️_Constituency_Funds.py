@@ -1,4 +1,4 @@
-"""Constituency Funds — How much does your MP spend in your area?"""
+﻿"""Constituency Funds — How much does your MP spend in your area?"""
 
 import streamlit as st
 import pandas as pd
@@ -81,7 +81,7 @@ fig_trend.update_layout(
     yaxis=dict(title=dict(text="₹ Crore", font=dict(color=TEXT_SEC)),
                gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
 )
-st.plotly_chart(fig_trend, use_container_width=True)
+st.plotly_chart(fig_trend, width='stretch')
 st.markdown(insight_box(
     "MPLADS was <b>suspended for 2 years (2020-21 & 2021-22)</b> and funds diverted to PM CARES during COVID-19. "
     "MPs and opposition parties protested this decision as it affected local development. "
@@ -115,12 +115,12 @@ if view == "State-wise Allocation":
         paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
         font=dict(color=TEXT_PRIMARY, family="DM Sans, sans-serif"),
         height=580,
-        margin=dict(l=8, r=120, t=8, b=8),
+        margin=dict(l=8, r=200, t=8, b=8),
         xaxis=dict(title=dict(text="₹ Crore", font=dict(color=TEXT_SEC)),
                    gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
         yaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
     )
-    st.plotly_chart(fig_alloc, use_container_width=True)
+    st.plotly_chart(fig_alloc, width='stretch')
     st.markdown(insight_box(
         "<b>UP gets the most MPLADS money (₹400 cr/yr)</b> simply because it has 80 Lok Sabha seats — "
         "the most of any state. But on a <b>per-capita basis</b>, smaller states and UTs "
@@ -157,7 +157,7 @@ elif view == "Utilization Rates":
                    gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC), range=[50, 100]),
         yaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
     )
-    st.plotly_chart(fig_util, use_container_width=True)
+    st.plotly_chart(fig_util, width='stretch')
     st.markdown(insight_box(
         "Utilization rate measures <b>how much of allocated MPLADS funds were actually spent</b>. "
         "<b>Gujarat, Goa, and Tamil Nadu</b> consistently show >90% utilization. "
@@ -191,7 +191,7 @@ elif view == "Work Categories":
             margin=dict(l=8, r=8, t=8, b=8),
             showlegend=False,
         )
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width='stretch')
 
     with right:
         st.markdown("<br><br>", unsafe_allow_html=True)

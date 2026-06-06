@@ -120,6 +120,55 @@ GLOBAL_CSS = f"""
 /* ── App base ── */
 *, *::before, *::after {{ box-sizing: border-box; }}
 
+/* ── Branded top header bar ──
+   Keep Streamlit's default position (fixed) so its JS correctly offsets stMain.
+   The ::before pseudo-element works on fixed elements just as well as relative. */
+header[data-testid="stHeader"] {{
+  background: {BG_ELEVATED} !important;
+  border-bottom: 1px solid {BORDER} !important;
+  box-shadow: 0 1px 8px rgba(200,78,0,0.06) !important;
+  overflow: visible !important;
+}}
+header[data-testid="stHeader"]::before {{
+  content: "BharatBudget";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: {ORANGE};
+  pointer-events: none;
+  white-space: nowrap;
+}}
+
+/* ── Style the hamburger toggle buttons ── */
+[data-testid="stSidebarCollapsedControl"] {{
+  top: 0.6rem !important;
+  left: 0.5rem !important;
+}}
+[data-testid="stSidebarCollapsedControl"] button,
+[data-testid="stSidebarCollapseButton"] button {{
+  background: {BG_ELEVATED} !important;
+  border: 1px solid {BORDER} !important;
+  border-radius: 8px !important;
+  color: {TEXT_SEC} !important;
+  transition: background 0.14s ease, color 0.14s ease !important;
+}}
+[data-testid="stSidebarCollapsedControl"] button:hover,
+[data-testid="stSidebarCollapseButton"] button:hover {{
+  background: rgba(200,78,0,0.08) !important;
+  color: {ORANGE} !important;
+  border-color: {ORANGE}55 !important;
+}}
+
+/* ── Hide Streamlit anchor-link icons on every heading ── */
+a[data-testid="stHeadingAnchorLink"] {{
+  display: none !important;
+}}
+
 .stApp {{
   background-color: {BG_PRIMARY} !important;
   font-family: 'DM Sans', system-ui, sans-serif !important;
@@ -129,7 +178,7 @@ GLOBAL_CSS = f"""
   color: {TEXT_PRIMARY} !important;
 }}
 .main .block-container {{
-  padding: 0.75rem 2rem 4rem !important;
+  padding: 0.5rem 2rem 4rem !important;
   max-width: 1280px !important;
   background-color: {BG_PRIMARY} !important;
 }}
@@ -140,7 +189,7 @@ GLOBAL_CSS = f"""
 ::-webkit-scrollbar-thumb        {{ background: {ORANGE}55; border-radius: 99px; }}
 ::-webkit-scrollbar-thumb:hover  {{ background: {ORANGE}; }}
 
-/* ── Sidebar — andrewlu0 clean style ── */
+/* ── Sidebar ── */
 [data-testid="stSidebar"] {{
   background-color: {BG_ELEVATED} !important;
   border-right: 1px solid {BORDER} !important;
@@ -162,22 +211,25 @@ GLOBAL_CSS = f"""
   color: {TEXT_PRIMARY} !important;
   font-family: 'DM Sans', sans-serif !important;
 }}
+
+/* ── Nav link base styles ── */
 [data-testid="stSidebarNavLink"] {{
   border-radius: 7px !important;
   margin: 1px 8px !important;
-  padding: 7px 10px !important;
+  padding: 8px 10px !important;
   font-size: 0.82rem !important;
   font-family: 'DM Sans', sans-serif !important;
   font-weight: 500 !important;
   color: {TEXT_SEC} !important;
   letter-spacing: 0.01em !important;
-  transition: background 0.14s ease, color 0.14s ease, transform 0.1s ease !important;
+  transition: background 0.14s ease, color 0.14s ease !important;
   border-left: 2px solid transparent !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
 }}
 [data-testid="stSidebarNavLink"]:hover {{
   background: rgba(200,78,0,0.08) !important;
   color: {ORANGE} !important;
-  transform: translateX(2px) !important;
   border-left-color: {ORANGE}55 !important;
 }}
 [data-testid="stSidebarNavLink"][aria-current="page"] {{
@@ -186,11 +238,14 @@ GLOBAL_CSS = f"""
   color: {ORANGE} !important;
   font-weight: 600 !important;
 }}
-[data-testid="stSidebarNavLink"] p {{
+/* Text label is a <span> (StyledSidebarLinkText) */
+[data-testid="stSidebarNavLink"] > span:last-child {{
   font-family: 'DM Sans', sans-serif !important;
   font-size: 0.82rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
 }}
-[data-testid="stSidebarNavLink"][aria-current="page"] p {{
+[data-testid="stSidebarNavLink"][aria-current="page"] > span:last-child {{
   font-weight: 600 !important;
   color: {ORANGE} !important;
 }}
@@ -198,12 +253,7 @@ GLOBAL_CSS = f"""
   padding: 4px 0 !important;
 }}
 
-/* ── Header: make it transparent, keep sidebar toggle functional ── */
-[data-testid="stHeader"] {{
-  background: transparent !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}}
+
 [data-testid="stStatusWidget"] {{ display: none !important; }}
 [data-testid="stDecoration"]   {{ display: none !important; }}
 #MainMenu {{ visibility: hidden !important; }}
@@ -347,20 +397,6 @@ footer    {{ visibility: hidden !important; }}
   color: {TEXT_PRIMARY} !important;
 }}
 
-/* ── Sidebar collapse toggle button ── */
-[data-testid="collapsedControl"] {{
-  background: {BG_ELEVATED} !important;
-  border: 1px solid {BORDER} !important;
-  border-radius: 0 8px 8px 0 !important;
-  padding: 10px 7px !important;
-  margin-top: 0.8rem !important;
-  color: {ORANGE} !important;
-  box-shadow: 2px 0 8px rgba(200,78,0,0.08) !important;
-}}
-[data-testid="collapsedControl"] svg {{
-  color: {ORANGE} !important;
-  fill: {ORANGE} !important;
-}}
 button[data-testid="baseButton-headerNoPadding"],
 button[data-testid="baseButton-header"] {{
   color: {TEXT_MUTED} !important;
@@ -624,14 +660,14 @@ def insight_box(text: str) -> str:
 
 
 def page_header(icon: str, title: str, subtitle: str) -> str:
+    icon_html = f'<span style="margin-right:0.4rem;">{icon}</span>' if icon else ""
     return f"""
-<div style="padding:0.2rem 0 1.3rem 0; animation:fadeUp 0.4s ease forwards;">
-  <div class="section-label">{icon} &nbsp; BharatBudget</div>
+<div style="padding:0 0 1.2rem 0; animation:fadeUp 0.4s ease forwards;">
   <h1 style="font-family:'Playfair Display',Georgia,serif;
-             font-size:clamp(1.7rem,4vw,2.3rem); font-weight:700;
-             letter-spacing:-0.02em; line-height:1.15;
-             color:{TEXT_PRIMARY}; margin:0.2rem 0 0.5rem 0;">{title}</h1>
-  <p style="font-family:'DM Sans',sans-serif; color:{TEXT_SEC}; font-size:0.92rem;
-            margin:0; max-width:640px; line-height:1.7;">{subtitle}</p>
+             font-size:clamp(2rem,5vw,2.8rem); font-weight:700;
+             letter-spacing:-0.03em; line-height:1.1;
+             color:{TEXT_PRIMARY}; margin:0 0 0.55rem 0;">{icon_html}{title}</h1>
+  <p style="font-family:'DM Sans',sans-serif; color:{TEXT_SEC}; font-size:0.95rem;
+            margin:0; max-width:680px; line-height:1.75;">{subtitle}</p>
 </div>
 """

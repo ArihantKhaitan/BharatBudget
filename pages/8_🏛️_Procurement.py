@@ -1,9 +1,8 @@
-"""Government Procurement — How much does India buy, and from whom?"""
+﻿"""Government Procurement — How much does India buy, and from whom?"""
 
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 
 from utils.styling import (
     footer_html, insight_box, page_header,
@@ -11,7 +10,7 @@ from utils.styling import (
     BORDER, GRID_COLOR, PLOTLY_PAPER, PLOTLY_PLOT, BG_ELEVATED,
 )
 from data.procurement import (
-    BUDGET_YEARS, GEM_ORDERS_TCR, GEM_SELLERS_LAKH, GEM_BUYERS_K,
+    BUDGET_YEARS, GEM_ORDERS_TCR, GEM_SELLERS_LAKH,
     GEM_CATEGORIES_2023_24, STATE_GEM_PROCUREMENT_2023_24,
     MAJOR_CONTRACTS_BY_SECTOR, GEM_MSME_PCT, GEM_WOMEN_ENTERPRISES_PCT,
 )
@@ -20,7 +19,7 @@ st.markdown(
     page_header(
         "🏛️",
         "Government Procurement",
-        "How does budget money reach businesses and people? Track India's ₹17L cr Government e-Marketplace, state-wise contracts, and major infrastructure tenders.",
+        "How does budget money reach businesses and people? Track India's Government e-Marketplace, state-wise contracts, and major infrastructure tenders.",
     ),
     unsafe_allow_html=True,
 )
@@ -33,7 +32,7 @@ gem_growth = (latest_gem - prev_gem) / prev_gem * 100
 
 c1, c2, c3, c4 = st.columns(4)
 with c1:
-    st.metric("GeM Orders 2024-25", f"₹{latest_gem:.1f}k cr",
+    st.metric("GeM Orders 2024-25", f"₹{latest_gem*1000:,.0f} cr",
               f"+{gem_growth:.0f}% vs 2023-24")
 with c2:
     st.metric("Registered Sellers", f"{GEM_SELLERS_LAKH['2024-25']:.1f} lakh",
@@ -63,10 +62,10 @@ fig_gem.add_trace(go.Bar(
         colorscale=[[0, BG_ELEVATED], [0.4, ORANGE_LIGHT], [1, ORANGE]],
         showscale=False,
     ),
-    text=[f"₹{v:.1f}k" for v in GEM_ORDERS_TCR.values()],
+    text=[f"₹{v:.1f}" for v in GEM_ORDERS_TCR.values()],
     textposition="outside",
     textfont=dict(color=TEXT_MUTED, size=9),
-    hovertemplate="%{x}: ₹%{y:.2f}k cr<extra></extra>",
+    hovertemplate="%{x}: ₹%{y:.2f} Th cr<extra></extra>",
 ))
 fig_gem.add_trace(go.Scatter(
     x=yrs, y=list(GEM_SELLERS_LAKH.values()),
@@ -91,9 +90,11 @@ fig_gem.update_layout(
                 overlaying="y", side="right",
                 tickfont=dict(color=TEAL), gridcolor="rgba(0,0,0,0)"),
 )
-st.plotly_chart(fig_gem, use_container_width=True)
+st.plotly_chart(fig_gem, width='stretch')
+_gem_first = GEM_ORDERS_TCR["2016-17"]
 st.markdown(insight_box(
-    "GeM has grown from virtually zero to <b>₹17.4 lakh crore</b> in orders by 2024-25 — a <b>870x growth in 8 years</b>. "
+    f"GeM has grown from virtually zero to <b>₹{latest_gem*1000:,.0f} crore</b> in orders by 2024-25 — "
+    f"a <b>{latest_gem/_gem_first:.0f}x growth in 8 years</b>. "
     "It has eliminated middlemen in government procurement, giving direct access to <b>11.8 lakh sellers</b> "
     "including MSMEs, startups, and artisans (SHGs). "
     "Savings estimated at 10-15% vs traditional tendering."
@@ -117,20 +118,20 @@ with left:
             color=df_cats["Value (₹ Th cr)"],
             colorscale=[[0, BG_ELEVATED], [0.5, ORANGE_LIGHT], [1, ORANGE]],
         ),
-        text=[f"₹{v:.2f}k cr" for v in df_cats["Value (₹ Th cr)"]],
+        text=[f"₹{v:.2f} Th cr" for v in df_cats["Value (₹ Th cr)"]],
         textposition="outside",
         textfont=dict(color=TEXT_MUTED, size=9),
-        hovertemplate="%{y}: ₹%{x:.2f}k cr<extra></extra>",
+        hovertemplate="%{y}: ₹%{x:.2f} Th cr<extra></extra>",
     ))
     fig_cat.update_layout(
         paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
         font=dict(color=TEXT_PRIMARY, family="DM Sans, sans-serif"),
         height=420,
-        margin=dict(l=8, r=80, t=8, b=8),
+        margin=dict(l=8, r=110, t=8, b=8),
         xaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
         yaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
     )
-    st.plotly_chart(fig_cat, use_container_width=True)
+    st.plotly_chart(fig_cat, width='stretch')
 
 with right:
     st.markdown(
@@ -144,21 +145,21 @@ with right:
         x=df_infra["Contracts (₹ Th cr)"], y=df_infra["Sector"],
         orientation="h",
         marker_color=colors_infra,
-        text=[f"₹{v:.2f}k cr" for v in df_infra["Contracts (₹ Th cr)"]],
+        text=[f"₹{v:.2f} Th cr" for v in df_infra["Contracts (₹ Th cr)"]],
         textposition="outside",
         textfont=dict(color=TEXT_MUTED, size=9),
-        hovertemplate="%{y}: ₹%{x:.2f}k cr<extra></extra>",
+        hovertemplate="%{y}: ₹%{x:.2f} Th cr<extra></extra>",
     ))
     fig_infra.update_layout(
         paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
         font=dict(color=TEXT_PRIMARY, family="DM Sans, sans-serif"),
         height=420,
-        margin=dict(l=8, r=80, t=8, b=8),
+        margin=dict(l=8, r=110, t=8, b=8),
         xaxis=dict(title=dict(text="₹ Thousand Crore", font=dict(color=TEXT_SEC)),
                    gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
         yaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
     )
-    st.plotly_chart(fig_infra, use_container_width=True)
+    st.plotly_chart(fig_infra, width='stretch')
 
 # ── Section 3: State-wise GeM procurement ────────────────────────────────────
 st.markdown("<br>", unsafe_allow_html=True)
@@ -178,21 +179,21 @@ fig_states = go.Figure(go.Bar(
         color=df_states["GeM Orders (₹ Th cr)"],
         colorscale=[[0, BG_ELEVATED], [0.4, ORANGE_LIGHT], [1, ORANGE]],
     ),
-    text=[f"₹{v:.2f}k cr" for v in df_states["GeM Orders (₹ Th cr)"]],
+    text=[f"₹{v:.2f} Th cr" for v in df_states["GeM Orders (₹ Th cr)"]],
     textposition="outside",
     textfont=dict(color=TEXT_MUTED, size=9),
-    hovertemplate="%{y}: ₹%{x:.2f}k cr<extra></extra>",
+    hovertemplate="%{y}: ₹%{x:.2f} Th cr<extra></extra>",
 ))
 fig_states.update_layout(
     paper_bgcolor=PLOTLY_PAPER, plot_bgcolor=PLOTLY_PLOT,
     font=dict(color=TEXT_PRIMARY, family="DM Sans, sans-serif"),
     height=560,
-    margin=dict(l=8, r=80, t=8, b=8),
+    margin=dict(l=8, r=110, t=8, b=8),
     xaxis=dict(title=dict(text="₹ Thousand Crore", font=dict(color=TEXT_SEC)),
                gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
     yaxis=dict(gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
 )
-st.plotly_chart(fig_states, use_container_width=True)
+st.plotly_chart(fig_states, width='stretch')
 st.markdown(insight_box(
     "<b>UP leads in state-level GeM procurement</b> partly due to its scale and active adoption by state govt bodies. "
     "Southern states like Karnataka and Tamil Nadu rank high due to IT and manufacturing procurement. "
@@ -236,6 +237,6 @@ fig_inc.update_layout(
     yaxis=dict(title=dict(text="% of GeM Orders", font=dict(color=TEXT_SEC)),
                gridcolor=GRID_COLOR, tickfont=dict(color=TEXT_SEC)),
 )
-st.plotly_chart(fig_inc, use_container_width=True)
+st.plotly_chart(fig_inc, width='stretch')
 
 st.markdown(footer_html(), unsafe_allow_html=True)

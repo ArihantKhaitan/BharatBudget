@@ -1,4 +1,4 @@
-"""State Finance Tracker — How much does each state get from the Centre?"""
+﻿"""State Finance Tracker — How much does each state get from the Centre?"""
 
 import streamlit as st
 import pandas as pd
@@ -7,14 +7,24 @@ import plotly.graph_objects as go
 
 from utils.styling import (
     footer_html, insight_box, page_header,
-    ORANGE, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_LIGHT, NAVY_CARD,
-    TEXT_MAIN, BLUE_SOFT, BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT,
-    BORDER, GRID_COLOR,
+    ORANGE, TEAL, TEXT_MUTED, TEXT_MAIN, NAVY_LIGHT,
+    PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
 )
 from data.states import (
     STATE_METADATA, PER_CAPITA_TRANSFER_2023_24,
     TOTAL_TRANSFERS_BY_YEAR, STATE_GSDP_GROWTH, FC_DEVOLUTION_SHARE,
 )
+
+# ── Header ────────────────────────────────────────────────────────────────────
+st.markdown(
+    page_header(
+        "🗺️",
+        "State Finance Tracker",
+        "How much does the Centre transfer to each state — and is it fair? Explore per-capita allocations, FC XV devolution shares, and GSDP trends.",
+    ),
+    unsafe_allow_html=True,
+)
+st.markdown("---")
 
 # ── Page controls (inline) ────────────────────────────────────────────────────
 c_sort, c_chk = st.columns([2, 1])
@@ -63,17 +73,6 @@ sort_col_map = {
     "FC Devolution Share": "fc_share",
 }
 df = df.sort_values(sort_col_map[sort_by], ascending=False).reset_index(drop=True)
-
-# ── Header ────────────────────────────────────────────────────────────────────
-st.markdown(
-    page_header(
-        "🗺️",
-        "State Finance Tracker",
-        "How much does the Centre transfer to each state — and is it fair? Explore per-capita allocations, FC XV devolution shares, and GSDP trends.",
-    ),
-    unsafe_allow_html=True,
-)
-st.markdown("---")
 
 # ── Key stats ─────────────────────────────────────────────────────────────────
 total_2324 = TOTAL_TRANSFERS_BY_YEAR["2023-24"]
@@ -167,7 +166,7 @@ fig_map.update_layout(
     margin=dict(l=0, r=0, t=0, b=0),
     geo=dict(bgcolor=PLOTLY_PAPER),
 )
-st.plotly_chart(fig_map, use_container_width=True)
+st.plotly_chart(fig_map, width='stretch')
 st.markdown(
     insight_box(
         "Bubble size and colour both represent per-capita central transfers. "
@@ -218,9 +217,9 @@ fig_bar.add_annotation(
         f"<span style='color:{TEAL};'>■</span> General State"
     ),
     showarrow=False, font=dict(size=10, color=TEXT_MUTED),
-    align="right", bgcolor="#0B1437",
+    align="right", bgcolor=PLOTLY_PAPER,
 )
-st.plotly_chart(fig_bar, use_container_width=True)
+st.plotly_chart(fig_bar, width='stretch')
 st.markdown(
     insight_box(
         f"<b>Special Category States</b> (shown in orange) receive disproportionately high "
@@ -262,7 +261,7 @@ fig_abs.update_layout(
     xaxis=dict(title="₹ Lakh Crore", gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
     yaxis=dict(tickfont=dict(size=10, color=TEXT_MUTED)),
 )
-st.plotly_chart(fig_abs, use_container_width=True)
+st.plotly_chart(fig_abs, width='stretch')
 st.markdown(
     insight_box(
         "<b>Uttar Pradesh</b> gets the largest absolute transfer (~₹1.97 L cr) due to its "
@@ -303,7 +302,7 @@ fig_fc.update_layout(
     xaxis=dict(title="% of divisible pool", gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
     yaxis=dict(tickfont=dict(size=10, color=TEXT_MUTED)),
 )
-st.plotly_chart(fig_fc, use_container_width=True)
+st.plotly_chart(fig_fc, width='stretch')
 st.markdown(
     insight_box(
         "The Finance Commission XV (2021-26) distributes <b>41% of central taxes</b> to states. "
@@ -362,7 +361,7 @@ fig_sc2.update_layout(
                tickfont=dict(color=TEXT_MUTED)),
     showlegend=False,
 )
-st.plotly_chart(fig_sc2, use_container_width=True)
+st.plotly_chart(fig_sc2, width='stretch')
 st.markdown(
     insight_box(
         "There's a <b>weak/flat correlation</b> between per-capita transfers and GSDP growth — "
@@ -390,8 +389,7 @@ df_table["Special Category"] = df_table["Special Category"].map({True: "Yes", Fa
 df_table["Per-Capita Transfer (₹)"] = df_table["Per-Capita Transfer (₹)"].apply(lambda x: f"₹{x:,}")
 df_table["Total Transfer (₹ L cr)"] = df_table["Total Transfer (₹ L cr)"].apply(lambda x: f"₹{x:.4f}")
 df_table["FC XV Share (%)"] = df_table["FC XV Share (%)"].apply(lambda x: f"{x:.3f}%")
-df_table = df_table.sort_values("Per-Capita Transfer (₹)", ascending=False)
-st.dataframe(df_table, use_container_width=True, hide_index=True)
+st.dataframe(df_table, width='stretch', hide_index=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Central transfer trend
@@ -420,7 +418,7 @@ fig_tt.update_layout(
     xaxis=dict(gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
     yaxis=dict(title="₹ Lakh Crore", gridcolor=NAVY_LIGHT, tickfont=dict(color=TEXT_MUTED)),
 )
-st.plotly_chart(fig_tt, use_container_width=True)
+st.plotly_chart(fig_tt, width='stretch')
 st.markdown(
     insight_box(
         f"Total central transfers to states have grown from <b>₹14.07 L cr (2018-19)</b> to "
