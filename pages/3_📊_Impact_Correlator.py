@@ -6,8 +6,9 @@ import numpy as np
 import plotly.graph_objects as go
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box,
-    ORANGE, TEAL, RED, TEXT_MUTED, NAVY_LIGHT, NAVY_CARD, TEXT_MAIN,
+    GLOBAL_CSS, footer_html, insight_box, page_header,
+    ORANGE, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_LIGHT, NAVY_CARD, TEXT_MAIN,
+    PLOTLY_PAPER, PLOTLY_PLOT,
 )
 from data.budget_data import BUDGET_YEARS, MINISTRY_ALLOCATIONS, TOTAL_BUDGET
 from data.indicators import (
@@ -83,7 +84,8 @@ def dual_axis_chart(years, spend_vals, outcome_vals,
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(
-        f"<h2 style='color:{ORANGE}; font-size:1.1rem;'>📊 Impact Correlator</h2>",
+        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
+        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.2rem 0;'>📊 Impact Correlator</div>",
         unsafe_allow_html=True,
     )
     st.markdown(
@@ -96,17 +98,19 @@ with st.sidebar:
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
-    f"<h1 style='color:{ORANGE}; font-size:1.8rem; margin-bottom:0.2rem;'>"
-    f"📊 Impact Correlator</h1>"
-    f"<p style='color:{TEXT_MUTED};'>Does spending more actually help? Let the data answer.</p>",
+    page_header(
+        "📊",
+        "Impact Correlator",
+        "Does spending more actually help? Track health, education, infrastructure, and agricultural outcomes against budget allocations.",
+    ),
     unsafe_allow_html=True,
 )
 st.markdown(
-    f"<div class='insight-box' style='margin-bottom:1.2rem;'>"
-    f"⚠️ <b>Important:</b> These charts show <b>correlation</b>, not causation. "
-    f"India's social outcomes are shaped by many factors beyond just budget allocation — "
-    f"state-level spending, private sector, global trends, and time lags all matter."
-    f"</div>",
+    insight_box(
+        "⚠️ <b>Important:</b> These charts show <b>correlation</b>, not causation. "
+        "India's social outcomes are shaped by many factors beyond just budget allocation — "
+        "state-level spending, private sector, global trends, and time lags all matter."
+    ),
     unsafe_allow_html=True,
 )
 st.markdown("---")

@@ -4,8 +4,8 @@ import streamlit as st
 import pandas as pd
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box,
-    ORANGE, TEAL, TEXT_MUTED, NAVY_CARD, NAVY_LIGHT,
+    GLOBAL_CSS, footer_html, insight_box, page_header,
+    ORANGE, TEAL, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_CARD, NAVY_LIGHT,
     BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
 )
 from data.budget_data import (
@@ -24,7 +24,8 @@ st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 # ── Sidebar controls ──────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(
-        f"<h2 style='color:{ORANGE}; font-size:1.1rem;'>🔍 Budget Explorer</h2>",
+        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
+        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.2rem 0;'>🔍 Budget Explorer</div>",
         unsafe_allow_html=True,
     )
     selected_year = st.selectbox("Select Year", BUDGET_YEARS[::-1], index=0)
@@ -56,10 +57,11 @@ if value_key == "actual":
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
-    f"<h1 style='color:{ORANGE}; font-size:1.8rem; margin-bottom:0.2rem;'>"
-    f"🔍 Budget Explorer</h1>"
-    f"<p style='color:{TEXT_MUTED};'>Union Budget {selected_year} — "
-    f"{'Allocated' if value_key=='allocated' else 'Actual Expenditure'}</p>",
+    page_header(
+        "🔍",
+        "Budget Explorer",
+        f"Union Budget {selected_year} — {'Allocated' if value_key=='allocated' else 'Actual Expenditure'} · Ministry-wise breakdown",
+    ),
     unsafe_allow_html=True,
 )
 st.markdown("---")

@@ -6,9 +6,10 @@ import numpy as np
 import plotly.graph_objects as go
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box,
-    ORANGE, TEAL, RED, TEXT_MUTED, NAVY_LIGHT, NAVY_CARD, TEXT_MAIN, BLUE_SOFT,
-    BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
+    GLOBAL_CSS, footer_html, insight_box, page_header,
+    ORANGE, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY, NAVY_LIGHT, NAVY_CARD,
+    TEXT_MAIN, BLUE_SOFT, BEIGE, BEIGE_MUTED, BG_PRIMARY, PLOTLY_PAPER, PLOTLY_PLOT,
+    BORDER, GRID_COLOR,
 )
 from data.states import (
     STATE_METADATA, PER_CAPITA_TRANSFER_2023_24,
@@ -26,7 +27,8 @@ st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(
-        f"<h2 style='color:{ORANGE}; font-size:1.1rem;'>🗺️ State Finance Tracker</h2>",
+        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
+        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.2rem 0;'>🗺️ State Finance Tracker</div>",
         unsafe_allow_html=True,
     )
     sort_by = st.selectbox(
@@ -82,9 +84,11 @@ df = df.sort_values(sort_col_map[sort_by], ascending=False).reset_index(drop=Tru
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
-    f"<h1 style='color:{ORANGE}; font-size:1.8rem; margin-bottom:0.2rem;'>"
-    f"🗺️ State Finance Tracker</h1>"
-    f"<p style='color:{TEXT_MUTED};'>How much does the Centre transfer to each state — and is it fair?</p>",
+    page_header(
+        "🗺️",
+        "State Finance Tracker",
+        "How much does the Centre transfer to each state — and is it fair? Explore per-capita allocations, FC XV devolution shares, and GSDP trends.",
+    ),
     unsafe_allow_html=True,
 )
 st.markdown("---")

@@ -6,9 +6,10 @@ import numpy as np
 import plotly.graph_objects as go
 
 from utils.styling import (
-    GLOBAL_CSS, footer_html, insight_box,
-    ORANGE, ORANGE_LIGHT, TEAL, RED, TEXT_MUTED, NAVY_LIGHT, NAVY_CARD,
-    BEIGE, BEIGE_MUTED, PLOTLY_PAPER, PLOTLY_PLOT, BORDER, GRID_COLOR,
+    GLOBAL_CSS, footer_html, insight_box, page_header,
+    ORANGE, ORANGE_LIGHT, TEAL, RED, TEXT_MUTED, TEXT_SEC, TEXT_PRIMARY,
+    NAVY_LIGHT, NAVY_CARD, BEIGE, BEIGE_MUTED, PLOTLY_PAPER, PLOTLY_PLOT,
+    BORDER, GRID_COLOR,
 )
 from data.budget_data import BUDGET_YEARS, MINISTRY_ALLOCATIONS, TOTAL_BUDGET, COMPARISON_MINISTRIES
 from components.charts import multiline_chart, yoy_bar
@@ -49,7 +50,8 @@ PALETTE = [ORANGE, "#E84040", "#7EB8FF", "#00C49A", "#C07BDB", "#6DBF7E", "#FF9A
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(
-        f"<h2 style='color:{ORANGE}; font-size:1.1rem;'>💸 Follow the Money</h2>",
+        f"<div style='font-family:\"Playfair Display\",Georgia,serif; font-size:1.05rem; "
+        f"font-weight:700; color:{ORANGE}; padding:1rem 0 0.2rem 0;'>💸 Follow the Money</div>",
         unsafe_allow_html=True,
     )
     selected_ministries = st.multiselect(
@@ -63,9 +65,11 @@ with st.sidebar:
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
-    f"<h1 style='color:{ORANGE}; font-size:1.8rem; margin-bottom:0.2rem;'>"
-    f"💸 Follow the Money</h1>"
-    f"<p style='color:{TEXT_MUTED};'>How have India's budget priorities shifted over the last decade?</p>",
+    page_header(
+        "💸",
+        "Follow the Money",
+        "How have India's budget priorities shifted over the last decade? Compare ministries, track trends, and find the story behind the numbers.",
+    ),
     unsafe_allow_html=True,
 )
 st.markdown("---")
